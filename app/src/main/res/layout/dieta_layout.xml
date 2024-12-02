@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+    </data>
+
+    <ScrollView
+        style="@android:style/Widget.Holo.ScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/fondoLunes"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/diaLunes"
+                app:layout_constraintEnd_toStartOf="@id/fondoMartes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/fondoMartes"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fondoLunes"
+                app:layout_constraintEnd_toStartOf="@id/fondoMiercoles"
+                app:layout_constraintStart_toEndOf="@+id/fondoLunes"
+                app:layout_constraintTop_toTopOf="@id/fondoLunes" />
+
+            <TextView
+                android:id="@+id/fondoMiercoles"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fondoMartes"
+                app:layout_constraintEnd_toStartOf="@id/fondoJueves"
+                app:layout_constraintStart_toEndOf="@+id/fondoMartes"
+                app:layout_constraintTop_toTopOf="@id/fondoMartes" />
+
+            <TextView
+                android:id="@+id/fondoJueves"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fondoMiercoles"
+                app:layout_constraintEnd_toStartOf="@id/fondoViernes"
+                app:layout_constraintStart_toEndOf="@+id/fondoMiercoles"
+                app:layout_constraintTop_toTopOf="@id/fondoMiercoles" />
+
+            <TextView
+                android:id="@+id/fondoViernes"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fondoJueves"
+                app:layout_constraintEnd_toStartOf="@id/fondoSabado"
+                app:layout_constraintStart_toEndOf="@+id/fondoJueves"
+                app:layout_constraintTop_toTopOf="@id/fondoJueves" />
+
+            <TextView
+                android:id="@+id/fondoSabado"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fondoViernes"
+                app:layout_constraintEnd_toStartOf="@id/fondoDomingo"
+                app:layout_constraintStart_toEndOf="@+id/fondoViernes"
+                app:layout_constraintTop_toTopOf="@id/fondoViernes" />
+
+            <TextView
+                android:id="@+id/fondoDomingo"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_marginEnd="6dp"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fondoSabado"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/fondoSabado"
+                app:layout_constraintTop_toTopOf="@id/fondoSabado" />
+
+            <TextView
+                android:id="@+id/diaLunes"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_dia"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="0"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/diaMartes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/diaMartes"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/ic_dia"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="1"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/diaMiercoles"
+                app:layout_constraintStart_toEndOf="@+id/diaLunes"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/diaMiercoles"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_dia"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="2"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/diaJueves"
+                app:layout_constraintStart_toEndOf="@+id/diaMartes"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/diaJueves"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_dia"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="3"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/diaViernes"
+                app:layout_constraintStart_toEndOf="@+id/diaMiercoles"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/diaViernes"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_dia"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="4"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/diaJueves"
+                app:layout_constraintEnd_toStartOf="@id/diaSabado"
+                app:layout_constraintStart_toEndOf="@+id/diaJueves"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/diaSabado"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_dia"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="5"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/diaViernes"
+                app:layout_constraintEnd_toStartOf="@id/diaDomingo"
+                app:layout_constraintStart_toEndOf="@+id/diaViernes"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/diaDomingo"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_dia"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="6"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/diaSabado"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/diaSabado"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="10dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintTop_toBottomOf="@+id/diaLunes"
+                card_view:cardCornerRadius="4sp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/diaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp" />
+
+                    <TextView
+                        android:id="@+id/desayunoHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_desayuno"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_desayuno" />
+
+                    <TextView
+                        android:id="@+id/mediamananaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_mediamanana"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_mediamanana" />
+
+                    <TextView
+                        android:id="@+id/comidaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_comida"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_comida" />
+
+                    <TextView
+                        android:id="@+id/meriendaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_merienda"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_merienda" />
+
+                    <TextView
+                        android:id="@+id/cenaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_cena"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dieta_cena" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btGenerarDieta"
+                style="?android:attr/yesNoPreferenceStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/medio_boton_izq"
+                android:backgroundTintMode="src_atop"
+                android:text="@string/generar_dieta"
+                android:gravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/btEditarDieta"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+            <ImageButton
+                android:id="@+id/btEditarDieta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/medio_boton_der"
+                android:contentDescription="@string/description_editar"
+                android:src="@drawable/ic_editar"
+                app:layout_constraintBottom_toBottomOf="@+id/btGenerarDieta"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/btGenerarDieta" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btGenerarDieta" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</layout>

@@ -1,0 +1,85 @@
+<resources>
+    <!-->Nombre app</-->
+    <string name="app_name">GeneradorDieta</string>
+
+    <!-->Fragments</-->
+    <string name="title_dieta">Dieta</string>
+    <string name="title_recetas">Recetas</string>
+    <string name="title_agregar_recetas">Agregar receta</string>
+    <string name="title_detalle_receta">Detalles de la receta</string>
+    <string name="title_editar_receta">Editar receta</string>
+    <string name="title_opciones">Opciones</string>
+
+    <!-->Comidas</-->
+    <string name="dieta_desayuno">Desayuno</string>
+    <string name="dieta_mediamanana">Mediamañana</string>
+    <string name="dieta_comida">Comida</string>
+    <string name="dieta_merienda">Merienda</string>
+    <string name="dieta_cena">Cena</string>
+
+    <!-->Días semana</-->
+    <string name="dia_lunes">Lunes</string>
+    <string name="dia_martes">Martes</string>
+    <string name="dia_miercoles">Miércoles</string>
+    <string name="dia_jueves">Jueves</string>
+    <string name="dia_viernes">Viernes</string>
+    <string name="dia_sabado">Sábado</string>
+    <string name="dia_domingo">Domingo</string>
+
+    <!-->Botones generar dieta</-->
+    <string name="generar_dieta">Generar dieta</string>
+    <string name="description_editar">editar</string>
+
+    <!-->Recetas</-->
+    <string name="receta_buscar">Buscar</string>
+    <string name="agregar_nueva_receta">Agregar nueva receta</string>
+    <string name="editar_receta">Editar receta</string>
+    <string name="agregar_nombre">Nombre</string>
+    <string name="agregar_categorias">Categorías</string>
+    <string name="boton_agregar_categoria">Botón agregar categoría</string>
+    <string name="agregar_preparacion">Preparación</string>
+    <string name="agregar_ingredientes">Ingredientes</string>
+    <string name="agregar_enlace">Enlace de la receta</string>
+    <string name="agregar_calorias">Calorías aprox. (kcal)</string>
+    <string name="agregar_bt">Agregar</string>
+    <string name="eliminar_receta">Eliminar receta</string>
+    <string name="avisoRepe">Ya has agregado </string>
+    <string name="avisoMinimo">La receta necesita al menos un nombre y categoría</string>
+    <string name="editar_bt">Editar receta</string>
+
+
+    <!-- >Confirmación<-->
+    <string name="si">Sí</string>
+    <string name="no">No</string>
+    <string name="cancelar">Operación cancelada</string>
+
+    <!--> Generar dieta <-->
+    <string name="aviso_acompanamiento">Necesitas al menos un acompañamiento para tu primer plato</string>
+    <string name="aviso_mediodia">Necesitas al menos 7 comidas completas o combinadas para el mediodía</string>
+    <string name="aviso_cena">Necesitas al menos 7 cenas completas o combinadas para el mediodía</string>
+    <string name="aviso_desayuno">Necesitas al menos 1 desayuno</string>
+
+
+    <!-->Categorías para buscar recetas</-->
+    <string-array name="receta_categoria">
+        <item>Todo</item>
+        <item>Carne</item>
+        <item>Pescado</item>
+        <item>Legumbres</item>
+        <item>Cereal</item>
+        <item>Huevo</item>
+        <item>Verdura</item>
+        <item>Fruta</item>
+        <item>Lácteo</item>
+        <item>Comida completa</item>
+        <item>Primer plato</item>
+        <item>Acompañamiento</item>
+        <item>Comida mediodía</item>
+        <item>Desayuno</item>
+        <item>MediaMañana</item>
+        <item>Merienda</item>
+        <item>Cena</item>
+        <item>Postre</item>
+    </string-array>
+
+</resources>

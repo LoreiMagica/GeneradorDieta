@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_dieta">
+
+    <fragment
+        android:id="@+id/nav_dieta"
+        android:name="com.lorei.generadorDieta.ui.fragment.DietaFragment"
+        android:label="@string/title_dieta"
+        tools:layout="@layout/dieta_layout" />
+
+    <fragment
+        android:id="@+id/nav_receta"
+        android:name="com.lorei.generadorDieta.ui.fragment.ListaRecetasFragment"
+        android:label="@string/title_recetas"
+        tools:layout="@layout/listarecetas_layout" />
+
+    <fragment
+        android:id="@+id/nav_agregar_receta"
+        android:name="com.lorei.generadorDieta.ui.fragment.AgregarRecetaFragment"
+        android:label="@string/title_agregar_recetas"
+        tools:layout="@layout/agregar_receta_layout" />
+
+    <fragment
+        android:id="@+id/nav_detalle_receta"
+        android:name="com.lorei.generadorDieta.ui.fragment.DetalleRecetaFragment"
+        android:label="@string/title_detalle_receta"
+        tools:layout="@layout/detalle_receta_layout" />
+    <fragment
+        android:id="@+id/nav_editar_receta"
+        android:name="com.lorei.generadorDieta.ui.fragment.EditarRecetaFragment"
+        android:label="@string/title_editar_receta"
+        tools:layout="@layout/agregar_receta_layout" />
+
+</navigation>

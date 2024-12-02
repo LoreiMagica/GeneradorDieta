@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/idConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitEnd">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitEnd">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilName"
+                    style="@style/textInputOuterField"
+                    app:layout_constraintBottom_toTopOf="@+id/tilCategoria"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etName"
+                        style="@style/textInputInnerField"
+                        android:hint="@string/agregar_nombre"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCategoria"
+                    style="@style/textInputOuterField"
+                    app:layout_constraintBottom_toTopOf="@+id/listaCategorias"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tilName">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etCategoria"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:paddingStart="15dp"
+                        android:hint="@string/agregar_categorias"
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/listaCategorias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/tilPreparacion"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tilCategoria"/>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilPreparacion"
+                    style="@style/textInputOuterField"
+                    app:layout_constraintBottom_toTopOf="@+id/tilIngredientes"
+                    android:lines="4"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/listaCategorias">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPreparacion"
+                        style="@style/textInputInnerField"
+                        android:lines="4"
+                        android:inputType="textMultiLine"
+                        android:gravity="top|left"
+                        android:hint="@string/agregar_preparacion"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilIngredientes"
+                    style="@style/textInputCategoria"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/listaIngredientes"
+                    app:layout_constraintEnd_toStartOf="@+id/botonAgregarIngrediente"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tilPreparacion">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etIngredientes"
+                        style="@style/textInputInnerField"
+                        android:hint="@string/agregar_ingredientes"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/botonAgregarIngrediente"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/ic_add"
+                    android:scaleType="fitEnd"
+                    android:textColor="?attr/colorPrimary"
+                    android:contentDescription="@string/boton_agregar_categoria"
+                    app:layout_constraintBottom_toBottomOf="@+id/tilIngredientes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tilIngredientes" />
+
+                <!-- ChipGroup para mostrar los chips -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/listaIngredientes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/tilUrl"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tilIngredientes"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilUrl"
+                    style="@style/textInputOuterField"
+                    app:layout_constraintBottom_toTopOf="@+id/tilCaloria"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/listaIngredientes">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUrl"
+                        style="@style/textInputInnerField"
+                        android:hint="@string/agregar_enlace"
+                        android:inputType="textWebEmailAddress"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilCaloria"
+                    style="@style/textInputOuterField"
+                    app:layout_constraintBottom_toTopOf="@+id/btAgregar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tilUrl">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCaloria"
+                        style="@style/textInputInnerField"
+                        android:inputType="number"
+                        android:hint="@string/agregar_calorias" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                <Button
+                    android:id="@+id/btAgregar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_agregar_receta"
+                    android:drawableTint="?attr/colorOnPrimary"
+                    android:text="@string/agregar_bt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tilCaloria" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
