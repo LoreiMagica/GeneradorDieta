@@ -29,6 +29,8 @@
     <!-->Botones generar dieta</-->
     <string name="generar_dieta">Generar dieta</string>
     <string name="description_editar">editar</string>
+    <string name="generarPdf">Volver a generar PDF</string>
+
 
     <!-->Recetas</-->
     <string name="receta_buscar">Buscar</string>

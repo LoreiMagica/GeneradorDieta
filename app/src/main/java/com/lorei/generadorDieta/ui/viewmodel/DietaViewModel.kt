@@ -8,14 +8,17 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
 import android.os.Build
+import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.lorei.generadorDieta.R
 import com.lorei.generadorDieta.model.Receta
@@ -1225,6 +1228,147 @@ class DietaViewModel : ViewModel() {
         //Intertamos y cerramos la conexión
         baseGuardado.update("dietaActual", registro, "numero=?", arrayOf((1).toString()) )
         baseGuardado.close()
+
+    }
+
+    /**
+     * Método para volver a generar el pdf de la actual dieta
+     */
+    fun volverAGenerarPdf(context: Context, diasSemana: List<String>, baseGuardado: SQLiteDatabase){
+        //Limpiamos los arrays para evitar duplicados
+        semanaDesayuno.clear()
+        semanaMediamanana.clear()
+        semanaMediodia.clear()
+        semanaAcompanamientoMediodia.clear()
+        semanaPostre.clear()
+        semanaMerienda.clear()
+        semanaCena.clear()
+        semanaAcompanamientoCena.clear()
+
+        //Hacemos la consulta a la BBDD
+        val cursor: Cursor = baseGuardado.rawQuery(
+            "Select name from sqlite_master where type = 'table' and name like 'dietaActual' ",
+            null
+        )
+        if (cursor.count > 0) {
+            //Accedemos a la tabla dietaActual en la base de datos
+            val cursorReceta: Cursor = baseGuardado.rawQuery(
+                "select numero, desayuno, mediamanana, comida, acompanamientoComida, postre, merienda, cena, acompanamientoCena from dietaActual where numero=1",
+                null
+            )
+            //Procesamos los datos obtenidos
+            if (cursorReceta.count > 0) {
+                while (cursorReceta.moveToNext()) {
+                    val gson = Gson()
+
+                    //Obtenemos y convertimos los datos de gson
+                    val jsonD = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("desayuno"))
+                    //Comprobamos que los datos obtenidos sean un array y no esté vacío
+                    if(jsonD != "desayuno") {
+                        //Y rellenamos los arrays de la dieta generada
+                        val arrayDesayuno = gson.fromJson(jsonD, Array<Receta>::class.java).toList()
+                        if(arrayDesayuno[0].nombre != null) {
+                            for (item in arrayDesayuno)
+                            semanaDesayuno.add(item)
+                        }
+                    } else {
+                        for (i in 1 until 8)
+                            semanaDesayuno.add(Receta(0, "", listOf("a"), "a", listOf(""), 0, "a"))
+                    }
+
+                    //Y repetimos
+                    val jsonMedia = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("mediamanana"))
+                    if (jsonMedia != "mediamanana") {
+                        val arrayMediamanana = gson.fromJson(jsonMedia, Array<Receta>::class.java).toList()
+                        if(arrayMediamanana[0].nombre != null) {
+                            for (item in arrayMediamanana)
+                                semanaMediamanana.add(item)
+                        }
+                    }else {
+                        for (i in 1 until 8)
+                            semanaMediamanana.add(Receta(0, "", listOf("a"), "a", listOf(""), 0, "a"))
+                    }
+                    val jsonMedio = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("comida"))
+                    if (jsonMedio != "comida") {
+                        val arrayMediodia = gson.fromJson(jsonMedio, Array<Receta>::class.java).toList()
+
+                        if(arrayMediodia[0].nombre != "") {
+                            Log.d("com", arrayMediodia.toString())
+                            for (item in arrayMediodia)
+                                semanaMediodia.add(item)
+                        }
+                    } else {
+                        for (i in 1 until 8)
+                            semanaMediodia.add(Receta(0, "", listOf("a"), "a", listOf(""), 0, "a"))
+                    }
+                    val jsonAcMedio = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("acompanamientoComida"))
+                    if(jsonAcMedio != "acompanamientoComida") {
+                        val arrayAcMediodia = gson.fromJson(jsonAcMedio, Array<Receta>::class.java).toList()
+                        if(arrayAcMediodia[0].nombre != null) {
+                            Log.d("accom", arrayAcMediodia.toString())
+
+                            for (item in arrayAcMediodia)
+                                semanaAcompanamientoMediodia.add(item)
+                        }
+                    } else {
+                        for (i in 1 until 8)
+                            semanaAcompanamientoMediodia.add(Receta(0, "", listOf("a"), "a", listOf(""), 0, "a"))
+                    }
+                    val jsonPo = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("postre"))
+                    if (jsonPo != "postre") {
+                        val arrayPostre = gson.fromJson(jsonPo, Array<Receta>::class.java).toList()
+                        if(arrayPostre[0].nombre != null) {
+                            Log.d("pos", arrayPostre.toString())
+
+                            for (item in arrayPostre)
+                                semanaPostre.add(item)
+                        }
+                    }else {
+                        for (i in 1 until 8)
+                            semanaPostre.add(Receta(0, "", listOf("a"), "a", listOf(""), 0, "a"))
+                    }
+                    val jsonMer = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("merienda"))
+                    if (jsonMer != "merienda") {
+                        val arrayMerienda =
+                            gson.fromJson(jsonMer, Array<Receta>::class.java).toList()
+                        if(arrayMerienda[0].nombre != null) {
+                            for (item in arrayMerienda)
+                                semanaMerienda.add(item)
+                        }
+                    }else {
+                        for (i in 1 until 8)
+                            semanaMerienda.add(Receta(0, "", listOf("a"), "a", listOf(""), 0, "a"))
+                    }
+                    val jsonCe = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("cena"))
+                    if (jsonCe != "cena"&& jsonCe != "") {
+                        val arrayCena =
+                            gson.fromJson(jsonCe, Array<Receta>::class.java).toList()
+                        if(arrayCena[0].nombre != null) {
+                            for (item in arrayCena)
+                                semanaCena.add(item)
+                        }
+                    }else {
+                        for (i in 1 until 8)
+                            semanaCena.add(Receta(0, "", listOf("a"), "a", listOf(""), 0, "a"))
+                    }
+                    val jsonAcCe = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("acompanamientoCena"))
+                    if (jsonAcCe != "acompanamientoCena" && jsonAcCe != "") {
+                        val arrayAcCena =
+                            gson.fromJson(jsonAcCe, Array<Receta>::class.java).toList()
+                        if(arrayAcCena[0].nombre != null) {
+                            for (item in arrayAcCena)
+                                semanaAcompanamientoCena.add(item)
+                        }
+                    }else {
+                        for (i in 1 until 8)
+                            semanaAcompanamientoCena.add(Receta(0, "", listOf("a"), "a", listOf(""), 0, "a"))
+                    }
+                }
+            }
+
+        }
+        //Llamamos al crear pdf
+        crearMenuPdf(context, diasSemana, baseGuardado)
 
     }
 }

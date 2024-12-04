@@ -255,6 +255,19 @@ class DietaFragment : Fragment() {
                 }
             }
         }
+
+        //Función para volver a generar la actual dieta
+        binding.btPdf.setOnClickListener {
+            //LiveData, para copiar la lista de la compra
+            viewModel.copiarCompra.observe(viewLifecycleOwner) { compra ->
+                val clipboard =
+                    requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("compra", compra)
+                clipboard.setPrimaryClip(clip)
+            }
+            val basePdf = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
+            viewModel.volverAGenerarPdf(requireContext(), diasSemana, basePdf)
+        }
         return binding.root
     }
     /**
@@ -505,7 +518,7 @@ class DietaFragment : Fragment() {
                             }
                         }
                     val jsonCe = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("cena"))
-                        if (jsonCe != "cena"&& jsonCe != "") {
+                    if (jsonCe != "cena"&& jsonCe != "") {
                             val arrayCena =
                                 gson.fromJson(jsonCe, Array<Receta>::class.java).toList()
                             if(arrayCena[dia].nombre != "") {
@@ -521,7 +534,7 @@ class DietaFragment : Fragment() {
                             }
                         }
                     val jsonAcCe = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("acompanamientoCena"))
-                        if (jsonAcCe != "acompanamientoCena" && jsonAcCe != "") {
+                    if (jsonAcCe != "acompanamientoCena" && jsonAcCe != "") {
                             val arrayAcCena =
                                 gson.fromJson(jsonAcCe, Array<Receta>::class.java).toList()
                             if(arrayAcCena[dia].nombre != "") {

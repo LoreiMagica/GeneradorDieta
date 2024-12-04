@@ -325,6 +325,20 @@
 
             </androidx.cardview.widget.CardView>
 
+            <ImageButton
+                android:id="@+id/btPdf"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/boton_redondo"
+                android:contentDescription="@string/generarPdf"
+                android:padding="7dp"
+                android:src="@drawable/ic_pdf"
+                app:layout_constraintBottom_toBottomOf="@+id/btGenerarDieta"
+                app:layout_constraintEnd_toStartOf="@id/btGenerarDieta"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btGenerarDieta"
@@ -335,10 +349,10 @@
                 android:layout_weight="1"
                 android:background="@drawable/medio_boton_izq"
                 android:backgroundTintMode="src_atop"
-                android:text="@string/generar_dieta"
                 android:gravity="center"
+                android:text="@string/generar_dieta"
                 app:layout_constraintEnd_toStartOf="@+id/btEditarDieta"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btPdf"
                 app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
             <ImageButton
