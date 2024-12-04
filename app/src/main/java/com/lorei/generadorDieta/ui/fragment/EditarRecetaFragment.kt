@@ -186,7 +186,6 @@ private fun isChipAlreadyAdded(text: String, chipGroup: ChipGroup): Boolean {
 
 
         //Intertamos y cerramos la conexión
-        Log.d("id", idR.toString())
         val filasAfectadas = baseGuardado.update("recetas", registro, "numero=?",
             arrayOf((idR).toString())
         )

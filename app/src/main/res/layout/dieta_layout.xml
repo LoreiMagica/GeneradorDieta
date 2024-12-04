@@ -244,6 +244,7 @@
                         android:textSize="20sp" />
 
                     <Button
+                        android:id="@+id/btdesayunoHoy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dieta_desayuno" />
@@ -256,6 +257,7 @@
                         android:textSize="20sp" />
 
                     <Button
+                        android:id="@+id/btmediamananaHoy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dieta_mediamanana" />
@@ -268,8 +270,19 @@
                         android:textSize="20sp" />
 
                     <Button
+                        android:id="@+id/btcomidaHoy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@string/dieta_comida" />
+                    <Button
+                        android:id="@+id/btAccomidaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:text="@string/dieta_comida" />
+                    <Button
+                        android:id="@+id/btPostrecomidaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:text="@string/dieta_comida" />
 
                     <TextView
@@ -280,6 +293,7 @@
                         android:textSize="20sp" />
 
                     <Button
+                        android:id="@+id/btmeriendaHoy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dieta_merienda" />
@@ -292,9 +306,20 @@
                         android:textSize="20sp" />
 
                     <Button
+                        android:id="@+id/btcenaHoy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/dieta_cena" />
+                    <Button
+                        android:id="@+id/btAccenaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:text="@string/dieta_comida" />
+                    <Button
+                        android:id="@+id/btPostrecenaHoy"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:text="@string/dieta_comida" />
 
                 </LinearLayout>
 

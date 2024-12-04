@@ -51,6 +51,9 @@
     <!-- >Confirmación<-->
     <string name="si">Sí</string>
     <string name="no">No</string>
+    <string name="ok">Ok</string>
+    <string name="copiar_compra">Copiar lista de la compra</string>
+    <string name="copiar_compra_exito">Lista copiada al portapapeles</string>
     <string name="cancelar">Operación cancelada</string>
 
     <!--> Generar dieta <-->
@@ -58,7 +61,9 @@
     <string name="aviso_mediodia">Necesitas al menos 7 comidas completas o combinadas para el mediodía</string>
     <string name="aviso_cena">Necesitas al menos 7 cenas completas o combinadas para el mediodía</string>
     <string name="aviso_desayuno">Necesitas al menos 1 desayuno</string>
-
+    <string name="pdf_guardado">PDF guardado en:</string>
+    <string name="pdf_error">Error al guardar el PDF</string>
+    <string name="pdf_titulo">¡Receta creada con éxito!</string>
 
     <!-->Categorías para buscar recetas</-->
     <string-array name="receta_categoria">
