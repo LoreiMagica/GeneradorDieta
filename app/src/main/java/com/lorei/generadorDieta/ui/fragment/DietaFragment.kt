@@ -213,8 +213,10 @@ class DietaFragment : Fragment() {
                     clipboard.setPrimaryClip(clip)
                 }
 
+                val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                var dieta = sharedPref!!.getInt("dieta", 0)
                 //Y entonces actualizamos la dieta de hoy
-                viewModel.generarDieta(baseGuardado, requireContext(), diasSemana)
+                viewModel.generarDieta(baseGuardado, requireContext(), diasSemana, dieta)
 
                 viewModel.actualizarDieta.observe(viewLifecycleOwner) { compra ->
                     val calHoy = Calendar.getInstance()
@@ -239,8 +241,10 @@ class DietaFragment : Fragment() {
                     //Cargamos la base de datos para obtener las recetas
                     val baseGuardado = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
 
+                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                    var dieta = sharedPref!!.getInt("dieta", 0)
                     //Llamamos al método para obtener estas
-                    viewModel.generarDieta(baseGuardado, requireContext(), diasSemana)
+                    viewModel.generarDieta(baseGuardado, requireContext(), diasSemana, dieta)
 
                     viewModel.actualizarDieta.observe(viewLifecycleOwner) { compra ->
                         val calHoy = Calendar.getInstance()
@@ -258,15 +262,55 @@ class DietaFragment : Fragment() {
 
         //Función para volver a generar la actual dieta
         binding.btPdf.setOnClickListener {
-            //LiveData, para copiar la lista de la compra
-            viewModel.copiarCompra.observe(viewLifecycleOwner) { compra ->
-                val clipboard =
-                    requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("compra", compra)
-                clipboard.setPrimaryClip(clip)
+            val basePdf = requireActivity().openOrCreateDatabase(
+                "baseGuardado.db",
+                Context.MODE_PRIVATE,
+                null
+            )
+                //Hacemos la consulta a la BBDD
+            val cursor: Cursor = basePdf.rawQuery(
+                "Select name from sqlite_master where type = 'table' and name like 'dietaActual' ",
+                null
+            )
+            if (cursor.count > 0) {
+                //Accedemos a la tabla dietaActual en la base de datos
+                val cursorReceta: Cursor = basePdf.rawQuery(
+                    "select numero, desayuno, mediamanana, comida, acompanamientoComida, postre, merienda, cena, acompanamientoCena from dietaActual where numero=1",
+                    null
+                )
+
+                //Procesamos los datos obtenidos
+                if (cursorReceta.count > 0) {
+                    while (cursorReceta.moveToNext()) {
+
+                        //Obtenemos y convertimos los datos de gson
+                        val jsonD =
+                            cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("desayuno"))
+                        //Comprobamos que los datos obtenidos sean un array y no esté vacío
+                        if (jsonD != "desayuno") {
+                            //LiveData, para copiar la lista de la compra
+                            viewModel.copiarCompra.observe(viewLifecycleOwner) { compra ->
+                                val clipboard =
+                                    requireContext().getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("compra", compra)
+                                clipboard.setPrimaryClip(clip)
+                            }
+                            val basePdf = requireActivity().openOrCreateDatabase(
+                                "baseGuardado.db",
+                                Context.MODE_PRIVATE,
+                                null
+                            )
+                            viewModel.volverAGenerarPdf(requireContext(), diasSemana, basePdf)
+                        }
+                    }
+                }
+            }else {
+                Toast.makeText(requireContext(), getString(R.string.pdf_volver_generar), Toast.LENGTH_SHORT).show()
             }
-            val basePdf = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
-            viewModel.volverAGenerarPdf(requireContext(), diasSemana, basePdf)
+        }
+
+        binding.btEditarDieta.setOnClickListener{
+            findNavController().navigate(R.id.nav_editar_generar_dieta)
         }
         return binding.root
     }

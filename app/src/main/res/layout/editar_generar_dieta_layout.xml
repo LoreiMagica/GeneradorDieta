@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/idConstraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitEnd">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitEnd">
+
+                <TextView
+                    android:id="@+id/textoTipoDieta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dieta_tipo"
+                    android:textSize="20sp"
+                    style="@style/textInputOuterField"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/listaDietas"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    style="@style/textInputOuterField"
+                    android:entries="@array/receta_categoria"
+                    app:layout_constraintBottom_toTopOf="@id/textoFav"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textoTipoDieta" />
+
+
+                <TextView
+                    android:id="@+id/textoFav"
+                    style="@style/textInputOuterField"
+                    android:text="@string/dieta_fav"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/etFav"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/listaDietas"/>
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/etFav"
+                    style="@style/textInputCategoria"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="8dp"
+                    android:hint="@string/receta_buscar"
+                    android:text=""
+                    app:layout_constraintEnd_toStartOf="@+id/botonAgregarFav"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textoFav" />
+
+                <ImageButton
+                    android:id="@+id/botonAgregarFav"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/ic_add"
+                    android:scaleType="fitEnd"
+                    android:textColor="?attr/colorPrimary"
+                    android:contentDescription="@string/boton_agregar_receta"
+                    app:layout_constraintBottom_toBottomOf="@+id/etFav"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/etFav" />
+
+                <!-- ChipGroup para mostrar los chips -->
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/listaFav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/btAgregar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etFav"/>
+
+                <Button
+                    android:id="@+id/btAgregar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@drawable/ic_editar"
+                    android:drawableTint="?attr/colorOnPrimary"
+                    android:text="@string/dieta_actualizar_preferencias"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/listaFav" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

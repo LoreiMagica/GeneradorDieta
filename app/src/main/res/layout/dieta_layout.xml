@@ -331,7 +331,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/boton_redondo"
+                android:background="@drawable/boton_redondo_oscuro"
                 android:contentDescription="@string/generarPdf"
                 android:padding="7dp"
                 android:src="@drawable/ic_pdf"

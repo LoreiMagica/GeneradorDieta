@@ -34,4 +34,10 @@
         android:label="@string/title_editar_receta"
         tools:layout="@layout/agregar_receta_layout" />
 
+    <fragment
+        android:id="@+id/nav_editar_generar_dieta"
+        android:name="com.lorei.generadorDieta.ui.fragment.EditarGenerarDietaFragment"
+        android:label="@string/title_configurar_dieta"
+        tools:layout="@layout/editar_generar_dieta_layout" />
+
 </navigation>
