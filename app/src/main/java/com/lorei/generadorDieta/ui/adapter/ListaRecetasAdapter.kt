@@ -1,5 +1,6 @@
 package com.lorei.generadorDieta.ui.adapter
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,12 +14,14 @@ import com.lorei.generadorDieta.model.Receta
 /**
  * Adapter del listado de recetas de su respectiva sección
  */
-class ListaRecetasAdapter(
+class ListaRecetasAdapter(arrayNombres : Array<out String>,
     private var data: List<Receta> // Listado de enlaces
 ) : RecyclerView.Adapter<ListaRecetasAdapter.ViewHolder>() {
 
     // Listener para obtener el enlace seleccionado al hacer click
     private var listener : OnClickListener? = null
+    val arrayNombres = arrayNombres
+
 
     //Interface y función Onclick para el contenedor
     interface OnClickListener {
@@ -51,7 +54,12 @@ class ListaRecetasAdapter(
             with(holder.binding) {
                 // Se muestra el titulo, descripcción y el resto de textViews
                 nombreReceta.text = nombre
-                categoriaReceta.text = categoria.toString()
+
+                var listaCategoria = ArrayList<String>()
+                for (i in categoria) {
+                    listaCategoria.add(arrayNombres.getOrElse(i) { "Cat" })
+                }
+                categoriaReceta.text = listaCategoria.toString()
 
                 // Se establece el método onclik
                 objetoReceta.setOnClickListener { listener?.onItemClick(id!!) }

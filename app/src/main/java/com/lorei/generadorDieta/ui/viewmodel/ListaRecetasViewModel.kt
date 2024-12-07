@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import com.lorei.generadorDieta.R
 import com.lorei.generadorDieta.model.Receta
 import com.lorei.generadorDieta.ui.adapter.ListaRecetasAdapter
 import org.json.JSONObject
@@ -23,12 +24,18 @@ class ListaRecetasViewModel() : ViewModel() {
 
     private var _adapter: ListaRecetasAdapter? = null
     val adapter get() = _adapter
+    lateinit var arrayNombres : Array<out String>
 
     val data = mutableListOf<Receta>()
 
     // Se inicializa doc y obtiene los deportes.
     init {
-        _adapter = ListaRecetasAdapter(data)
+
+    }
+    fun cargarAdapter(context : Context){
+        arrayNombres = context.resources.getStringArray(R.array.receta_categoria)
+
+        _adapter = ListaRecetasAdapter(arrayNombres, data)
 
     }
 
@@ -45,7 +52,7 @@ class ListaRecetasViewModel() : ViewModel() {
         if (cursor.count > 0) {
             //Accedemos a la tabla recetas en la base de datos
             val cursorReceta: Cursor = baseGuardado.rawQuery(
-                "select numero, nombre, categorias, preparacion, ingredientes, calorias, url from recetas",
+                "select numero, nombre, categorias, horasComida, preparacion, ingredientes, calorias, url from recetas",
                 null
             )
 
@@ -56,14 +63,14 @@ class ListaRecetasViewModel() : ViewModel() {
                     //Transformamos los arrays de categoría
                     val json1 = JSONObject(cursorReceta.getString(2))
                     val jsonCategorias = json1.optJSONArray("listaCategorias")
-                    val listaCategorias : ArrayList<String> = ArrayList()
+                    val listaCategorias : ArrayList<Int> = ArrayList()
 
                     for ( i in 0 until jsonCategorias!!.length()){
-                        listaCategorias.add(jsonCategorias[i].toString());
+                        listaCategorias.add(jsonCategorias[i].toString().toInt());
                     }
 
                     //Y también con ingredientes
-                    val json2 = JSONObject(cursorReceta.getString(4))
+                    val json2 = JSONObject(cursorReceta.getString(5))
                     val jsonIngredientes = json2.optJSONArray("listaIngredientes")
                     val listaIngredientes : ArrayList<String> = ArrayList()
 
@@ -71,15 +78,25 @@ class ListaRecetasViewModel() : ViewModel() {
                         listaIngredientes.add(jsonIngredientes[i].toString());
                     }
 
+                    //Transformamos los arrays de categoría
+                    val json3 = JSONObject(cursorReceta.getString(3))
+                    val jsonHoras = json3.optJSONArray("listaHoras")
+                    val listaHoras : ArrayList<Int> = ArrayList()
+
+                    for ( i in 0 until jsonHoras!!.length()){
+                        listaHoras.add(jsonHoras[i].toString().toInt());
+                    }
+
                     //Creamos el objeto receta
                     val receta = Receta(
                         cursorReceta.getInt(0),
                         cursorReceta.getString(1),
                         listaCategorias,
-                        cursorReceta.getString(3),
+                        listaHoras,
+                        cursorReceta.getString(4),
                         listaIngredientes,
-                        cursorReceta.getInt(5),
-                        cursorReceta.getString(6)
+                        cursorReceta.getInt(6),
+                        cursorReceta.getString(7)
 
                     )
 
@@ -91,17 +108,25 @@ class ListaRecetasViewModel() : ViewModel() {
     }
 
     //Función para filtrar la lista de recetas al usar el spinner
-    fun filterCategoria(categoria : String) {
+    fun filterCategoria(categoria : String, pos :Int) {
         val filteredList: ArrayList<Receta> = ArrayList()
 
         //Si se elige "T0do", se muestran todas las recetas
         if (categoria != "Todo") {
             for (item in data) {
-                for (c in item.categoria)
-                    if (c == categoria) {
-                        filteredList.add(item)
-                    }
+                if (pos > 8) {
+                    for (c in item.horas)
+                        if (arrayNombres.getOrElse(c) { "Desayuno" } == categoria) {
+                            filteredList.add(item)
+                        }
+                } else {
+                    for (c in item.categoria)
+                        if (arrayNombres.getOrElse(c) { "Carne" } == categoria) {
+                            filteredList.add(item)
+                        }
+                }
                 _adapter?.filterList(filteredList)
+
             }
         } else {
             _adapter?.filterList(data)

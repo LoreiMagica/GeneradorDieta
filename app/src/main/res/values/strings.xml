@@ -49,7 +49,8 @@
     <string name="agregar_hora_comida">Hora de esta comida</string>
     <string name="eliminar_receta">Eliminar receta</string>
     <string name="avisoRepe">Ya has agregado </string>
-    <string name="avisoMinimo">La receta necesita al menos un nombre y categoría</string>
+    <string name="avisoMinimo">La receta necesita al menos un nombre, categoría y hora</string>
+    <string name="avisoExiste">Esta receta ya existe</string>
     <string name="editar_bt">Editar receta</string>
 
 
@@ -63,8 +64,8 @@
 
     <!--> Generar dieta <-->
     <string name="aviso_acompanamiento">Necesitas al menos un acompañamiento para tu primer plato</string>
-    <string name="aviso_mediodia">Necesitas al menos 7 comidas completas o combinadas para el mediodía</string>
-    <string name="aviso_cena">Necesitas al menos 7 cenas completas o combinadas para el mediodía</string>
+    <string name="aviso_mediodia">Necesitas al menos 7 comidas completas o combinadas del mediodía para el tipo de dieta que estás usando</string>
+    <string name="aviso_cena">Necesitas al menos 7 cenas completas o combinadas para el tipo de dieta que estás usando</string>
     <string name="aviso_desayuno">Necesitas al menos 1 desayuno</string>
     <string name="pdf_guardado">PDF guardado en:</string>
     <string name="pdf_error">Error al guardar el PDF</string>

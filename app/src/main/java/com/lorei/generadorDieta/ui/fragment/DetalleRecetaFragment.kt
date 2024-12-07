@@ -34,6 +34,7 @@ class DetalleRecetaFragment : Fragment() {
         binding = DetalleRecetaLayoutBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[DetalleRecetaViewModel::class.java]
 
+        val arrayNombres = requireActivity().resources.getStringArray(R.array.receta_categoria)
 
         //Abrimos la base de datos
         val baseGuardado = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
@@ -45,7 +46,12 @@ class DetalleRecetaFragment : Fragment() {
 
         //Obtenemos y seteamos las categorías
         for (cat in receta.categoria)
-            addChipToGroup(cat, binding.recetaCategorias)
+            addChipToGroup(arrayNombres.getOrElse(cat) { "Error" }, binding.recetaCategorias)
+
+
+        //Obtenemos y seteamos las categorías
+        for (hora in receta.horas)
+            addChipToGroup(arrayNombres.getOrElse(hora) { "Error" }, binding.listahoras)
 
         //También los ingredientes, como una lista html
         var ingredientes = "<ul>"

@@ -32,7 +32,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilName"
                     style="@style/textInputOuterField"
-                    app:layout_constraintBottom_toTopOf="@+id/tilCategoria"
+                    app:layout_constraintBottom_toTopOf="@+id/textoCategoria"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="parent">
@@ -44,24 +44,19 @@
                         android:text="" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilCategoria"
-                    style="@style/textInputOuterField"
-                    app:layout_constraintBottom_toTopOf="@+id/listaCategorias"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tilName">
 
-                    <AutoCompleteTextView
-                        android:id="@+id/etCategoria"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:paddingStart="15dp"
-                        android:hint="@string/agregar_categorias"
-                        android:textSize="14sp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/textoCategoria"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/agregar_categorias"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tilName"
+                    app:layout_constraintBottom_toTopOf="@+id/listaCategorias"
+                    />
 
 
                 <com.google.android.material.chip.ChipGroup
@@ -71,7 +66,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/textoHoraComida"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tilCategoria"/>
+                    app:layout_constraintTop_toBottomOf="@+id/textoCategoria"/>
 
                 <TextView
                     android:id="@+id/textoHoraComida"
@@ -90,60 +85,79 @@
                     android:id="@+id/horaComida"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:selectionRequired="true"
                     app:layout_constraintBottom_toTopOf="@+id/tilPreparacion"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textoHoraComida">
-                <com.google.android.material.chip.Chip
+                <!--com.google.android.material.chip.Chip
                     android:id="@+id/chipComidaCompleta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:clickable="true"
                     android:text="Comida completa"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipPrimerPlato"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:clickable="true"
                     android:text="Primer plato"/>
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chipAcompanamiento"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:clickable="true"
                     android:text="Acompañamiento"/>
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipDesayuno"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
                         android:text="Desayuno"/>
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipMediamanana"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
                         android:text="Mediamañana"/>
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipMediodia"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
                         android:text="Mediodía"/>
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipMerienda"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
                         android:text="Merienda"/>
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipCena"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:clickable="true"
                         android:text="Cena"/>
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chipPostre"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Postre"/>
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:text="Postre" /-->
 
                 </com.google.android.material.chip.ChipGroup>
 

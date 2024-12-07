@@ -29,6 +29,7 @@ class ListaRecetasFragment : Fragment() {
     ): View {
         binding = ListarecetasLayoutBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[ListaRecetasViewModel::class.java]
+        viewModel.cargarAdapter(requireContext())
 
 
         //Cargamos la base de datos para obtener las recetas
@@ -62,7 +63,7 @@ class ListaRecetasFragment : Fragment() {
         binding.buscarCategoria.onItemSelectedListener = object :
         AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                viewModel.filterCategoria(binding.buscarCategoria.getItemAtPosition(p2).toString())
+                viewModel.filterCategoria(binding.buscarCategoria.getItemAtPosition(p2).toString(), p2)
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {

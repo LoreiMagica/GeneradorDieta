@@ -22,13 +22,11 @@ import kotlin.coroutines.coroutineContext
 class EditarGenerarDietaViewModel() : ViewModel() {
 
     private var _adapter: ListaRecetasAdapter? = null
-    val adapter get() = _adapter
 
     val data = mutableListOf<Receta>()
 
     // Se inicializa doc y obtiene los deportes.
     init {
-        _adapter = ListaRecetasAdapter(data)
 
     }
 
@@ -45,7 +43,7 @@ class EditarGenerarDietaViewModel() : ViewModel() {
         if (cursor.count > 0) {
             //Accedemos a la tabla recetas en la base de datos
             val cursorReceta: Cursor = baseGuardado.rawQuery(
-                "select numero, nombre, categorias, preparacion, ingredientes, calorias, url from recetas",
+                "select numero, nombre, categorias, horasComida, preparacion, ingredientes, calorias, url from recetas",
                 null
             )
 
@@ -56,14 +54,14 @@ class EditarGenerarDietaViewModel() : ViewModel() {
                     //Transformamos los arrays de categoría
                     val json1 = JSONObject(cursorReceta.getString(2))
                     val jsonCategorias = json1.optJSONArray("listaCategorias")
-                    val listaCategorias : ArrayList<String> = ArrayList()
+                    val listaCategorias : ArrayList<Int> = ArrayList()
 
                     for ( i in 0 until jsonCategorias!!.length()){
-                        listaCategorias.add(jsonCategorias[i].toString());
+                        listaCategorias.add(jsonCategorias[i].toString().toInt());
                     }
 
                     //Y también con ingredientes
-                    val json2 = JSONObject(cursorReceta.getString(4))
+                    val json2 = JSONObject(cursorReceta.getString(5))
                     val jsonIngredientes = json2.optJSONArray("listaIngredientes")
                     val listaIngredientes : ArrayList<String> = ArrayList()
 
@@ -71,15 +69,25 @@ class EditarGenerarDietaViewModel() : ViewModel() {
                         listaIngredientes.add(jsonIngredientes[i].toString());
                     }
 
+                    //Transformamos los arrays de categoría
+                    val json3 = JSONObject(cursorReceta.getString(3))
+                    val jsonHoras = json3.optJSONArray("listaHoras")
+                    val listaHoras : ArrayList<Int> = ArrayList()
+
+                    for ( i in 0 until jsonHoras!!.length()){
+                        listaHoras.add(jsonHoras[i].toString().toInt());
+                    }
+
                     //Creamos el objeto receta
                     val receta = Receta(
                         cursorReceta.getInt(0),
                         cursorReceta.getString(1),
                         listaCategorias,
-                        cursorReceta.getString(3),
+                        listaHoras,
+                        cursorReceta.getString(4),
                         listaIngredientes,
-                        cursorReceta.getInt(5),
-                        cursorReceta.getString(6)
+                        cursorReceta.getInt(6),
+                        cursorReceta.getString(7)
 
                     )
 
