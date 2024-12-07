@@ -37,6 +37,7 @@
     <string name="receta_buscar">Buscar</string>
     <string name="agregar_nueva_receta">Agregar nueva receta</string>
     <string name="editar_receta">Editar receta</string>
+    <string name="compartir_receta">Editar receta</string>
     <string name="agregar_nombre">Nombre</string>
     <string name="agregar_categorias">Categorías</string>
     <string name="boton_agregar_categoria">Botón agregar categoría</string>
@@ -61,6 +62,9 @@
     <string name="copiar_compra">Copiar lista de la compra</string>
     <string name="copiar_compra_exito">Lista copiada al portapapeles</string>
     <string name="cancelar">Operación cancelada</string>
+
+    <string name="compartir_con">Compartir con</string>
+
 
     <!--> Generar dieta <-->
     <string name="aviso_acompanamiento">Necesitas al menos un acompañamiento para tu primer plato</string>

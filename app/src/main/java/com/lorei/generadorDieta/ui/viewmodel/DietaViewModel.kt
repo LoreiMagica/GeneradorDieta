@@ -2057,10 +2057,22 @@ class DietaViewModel : ViewModel() {
                         pdfDocument.writeTo(outputStream)
                         pdfDocument.close()
 
+                        //Seteamos la dieta generada en la base de datos para luego mostrarla al usuario
+                        agregarDietaSemana(baseGuardado)
+
+                        //Obtenemos el path para indicar al usuario la ruta donde está el pdf
+                        var realpath = ""
+                        context.contentResolver.query(it, arrayOf(MediaStore.Images.Media.DATA), null, null, null)?.use { cursor ->
+                            val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                            if (cursor.moveToFirst()) {
+                                realpath = cursor.getString(columnIndex)
+                            }
+                        }
+
                         //Notificamos al usuario con un dialog
                         val ostiaPdf = AlertDialog.Builder(context)
                         ostiaPdf.setTitle(context.getString(R.string.pdf_titulo))
-                        ostiaPdf.setMessage(context.getString(R.string.pdf_guardado) + " $outputStream$fileName")
+                        ostiaPdf.setMessage(context.getString(R.string.pdf_guardado) + " $realpath")
 
                         ostiaPdf.setPositiveButton(R.string.ok) { dialog, which ->
                         }
@@ -2170,6 +2182,8 @@ class DietaViewModel : ViewModel() {
                     // Guardar el PDF
                     pdfDocument.writeTo(outputStream)
                     pdfDocument.close()
+
+                    //Actualizamos la base de datos con la dieta generada
                     agregarDietaSemana(baseGuardado)
 
                     //Notificamos al usuario con un dialog
@@ -2408,7 +2422,7 @@ class DietaViewModel : ViewModel() {
                         val arrayDesayuno = gson.fromJson(jsonD, Array<Receta>::class.java).toList()
                         if(arrayDesayuno[0].nombre != null) {
                             for (item in arrayDesayuno)
-                            semanaDesayuno.add(item)
+                                semanaDesayuno.add(item)
                         }
                     } else {
                         for (i in 1 until 8)

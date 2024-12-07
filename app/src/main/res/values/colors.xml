@@ -11,7 +11,10 @@
     <color name="green_500">#32AE10</color>
     <color name="green_700">#27800F</color>
     <color name="eliminar">#871F1F</color>
-
+    <color name="opcionesFondoDia">#EEEEEE</color>
+    <color name="opcionesFondoNoche">#1a1a1a</color>
+    <color name="opcionesColorDentroCuadroDia">#d3d3d3</color>
+    <color name="opcionesColorDentroCuadroNoche">#525252</color>
 
 
 </resources>

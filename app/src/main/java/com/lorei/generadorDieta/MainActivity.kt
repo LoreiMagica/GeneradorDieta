@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide() // Ocultar ActionBar
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

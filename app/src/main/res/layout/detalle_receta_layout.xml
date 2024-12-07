@@ -143,13 +143,14 @@
 
                 <TextView
                     android:id="@+id/recetaUrl"
-                    android:layout_width="wrap_content"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:paddingStart="16dp"
                     android:text="@string/agregar_enlace"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/btEliminar"
+                    app:layout_constraintEnd_toEndOf="@+id/textoUrl"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textoUrl" />
 
                 <TextView
@@ -209,6 +210,22 @@
                     app:fabSize="normal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:tint="@color/white" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/btCompartir"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:contentDescription="@string/editar_receta"
+                    android:src="@drawable/ic_compartir"
+                    app:backgroundTint="?attr/colorPrimaryVariant"
+                    app:borderWidth="0dp"
+                    app:elevation="8dp"
+                    app:fabSize="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:tint="@color/white" />
 
 

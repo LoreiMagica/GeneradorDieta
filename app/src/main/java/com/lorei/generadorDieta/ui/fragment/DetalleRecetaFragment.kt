@@ -3,6 +3,7 @@ package com.lorei.generadorDieta.ui.fragment
 import DetalleRecetaViewModel
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -97,6 +98,32 @@ class DetalleRecetaFragment : Fragment() {
             bundle.putInt("idReceta", id)
             //Y con esto pasamos a la siguiente pantalla
             findNavController().navigate(R.id.nav_editar_receta, bundle)
+        }
+
+        binding.btCompartir.setOnClickListener {
+            var texto = "${receta.nombre}<br>"
+
+            if(ingredientes != "") {
+                texto += "<b>${getString(R.string.agregar_ingredientes)}:</b><br>$ingredientes <br>"
+            }
+
+            if (receta.preparacion != "") {
+                texto += "<b>${getString(R.string.agregar_preparacion)}:</b><br>${receta.preparacion} <br>"
+            }
+            if(receta.url != "") {
+                texto +="<b>${getString(R.string.agregar_enlace)}:</b><br>${receta.url} <br>"
+            }
+
+            val textoParaCompartir = android.text.Html.fromHtml(texto)
+            // Crear el Intent de tipo ACTION_SEND
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/html"  // Tipo de contenido
+                putExtra(Intent.EXTRA_TEXT, textoParaCompartir.toString())
+                putExtra(Intent.EXTRA_SUBJECT, "Receta")  // Asunto opcional
+            }
+
+            // Iniciar el Intent para mostrar las opciones de compartir
+            startActivity(Intent.createChooser(intent,getString(R.string.compartir_con) ))
         }
 
         return binding.root

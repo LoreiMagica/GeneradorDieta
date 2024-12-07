@@ -12,5 +12,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="colorPrimaryContainer">@color/opcionesFondoNoche</item>
+        <item name="colorOnPrimaryContainer">@color/opcionesColorDentroCuadroNoche</item>
+
+
     </style>
 </resources>
