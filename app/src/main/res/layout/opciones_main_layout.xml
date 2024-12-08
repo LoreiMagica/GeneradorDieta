@@ -35,7 +35,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Opción 1"
+                    android:text="@string/opcion_menu_copia"
                     android:textSize="18sp" />
 
                 <ImageView
@@ -61,12 +61,34 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Activar opción"
+                    android:text="@string/opcion_menu_tema"
                     android:textSize="18sp" />
 
                 <Switch
-                    android:id="@+id/switch_option"
+                    android:id="@+id/opcion_switch_tema"
                     android:layout_width="48dp"
+                    android:layout_height="48dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/option_background"
+                android:padding="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/opcion_menu_idioma"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/opcion_spinner_idioma"
+                    android:layout_width="wrap_content"
                     android:layout_height="48dp" />
             </LinearLayout>
 

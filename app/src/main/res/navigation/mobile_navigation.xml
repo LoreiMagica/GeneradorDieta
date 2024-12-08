@@ -39,5 +39,10 @@
         android:name="com.lorei.generadorDieta.ui.fragment.EditarGenerarDietaFragment"
         android:label="@string/title_configurar_dieta"
         tools:layout="@layout/editar_generar_dieta_layout" />
+    <fragment
+        android:id="@+id/nav_menu_opciones"
+        android:name="com.lorei.generadorDieta.ui.fragment.OpcionesMenuFragment"
+        android:label="@string/title_opciones_menu"
+        tools:layout="@layout/opciones_main_layout" />
 
 </navigation>

@@ -1,6 +1,6 @@
 <resources>
     <!-->Nombre app</-->
-    <string name="app_name">GeneradorDieta</string>
+    <string name="app_name">DietApp Calendario</string>
 
     <!-->Fragments</-->
     <string name="title_dieta">Dieta</string>
@@ -9,7 +9,7 @@
     <string name="title_detalle_receta">Detalles de la receta</string>
     <string name="title_editar_receta">Editar receta</string>
     <string name="title_configurar_dieta">Configurar dieta</string>
-    <string name="title_opciones">Opciones</string>
+    <string name="title_opciones_menu">Opciones</string>
 
     <!-->Comidas</-->
     <string name="dieta_desayuno">Desayuno</string>
@@ -37,10 +37,10 @@
     <string name="receta_buscar">Buscar</string>
     <string name="agregar_nueva_receta">Agregar nueva receta</string>
     <string name="editar_receta">Editar receta</string>
-    <string name="compartir_receta">Editar receta</string>
+    <string name="compartir_receta">Compartir receta</string>
     <string name="agregar_nombre">Nombre</string>
     <string name="agregar_categorias">Categorías</string>
-    <string name="boton_agregar_categoria">Botón agregar categoría</string>
+    <string name="boton_agregar_categoria">Botón agregar ingrediente</string>
     <string name="boton_agregar_receta">Botón agregar receta</string>
     <string name="agregar_preparacion">Preparación</string>
     <string name="agregar_ingredientes">Ingredientes</string>
@@ -52,7 +52,6 @@
     <string name="avisoRepe">Ya has agregado </string>
     <string name="avisoMinimo">La receta necesita al menos un nombre, categoría y hora</string>
     <string name="avisoExiste">Esta receta ya existe</string>
-    <string name="editar_bt">Editar receta</string>
 
 
     <!-- >Confirmación<-->
@@ -78,6 +77,13 @@
     <string name="dieta_tipo">Tipo de dieta</string>
     <string name="dieta_fav">Recetas favoritas para la siguiente dieta</string>
     <string name="dieta_actualizar_preferencias">Actualizar preferencias</string>
+
+    <!--> Opciones <-->
+    <string name="opcion_menu_copia">Copia de seguridad</string>
+    <string name="opcion_menu_tema">Usar tema oscuro</string>
+    <string name="opcion_menu_idioma">Idioma</string>
+
+
 
     <!-->Categorías para buscar recetas</-->
     <string-array name="receta_categoria">
@@ -106,6 +112,12 @@
         <item>Omnívora</item>
         <item>Vegetariana</item>
         <item>Vegana</item>
+    </string-array>
+
+    <!-->Spinner idiomas</-->
+    <string-array name="spinner_idiomas">
+        <item>Español</item>
+        <item>English</item>
     </string-array>
 
 </resources>

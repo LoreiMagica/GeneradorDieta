@@ -152,7 +152,7 @@ class EditarRecetaFragment : Fragment() {
         binding.etUrl.setText(receta.url)
         binding.etCaloria.setText(receta.calorias.toString())
 
-        binding.btAgregar.text = getString(R.string.editar_bt)
+        binding.btAgregar.text = getString(R.string.editar_receta)
 
         //Se carga la lista de categorías de comidas
         val categorias = resources.getStringArray(R.array.receta_categoria)

@@ -1,0 +1,122 @@
+<resources>
+    <!-->Nombre app</-->
+    <string name="app_name">DietApp Calendar</string>
+
+    <!-->Fragments</-->
+    <string name="title_dieta">Diet</string>
+    <string name="title_recetas">Recipes</string>
+    <string name="title_agregar_recetas">Add recipe</string>
+    <string name="title_detalle_receta">Recipe details</string>
+    <string name="title_editar_receta">Edit recipe</string>
+    <string name="title_configurar_dieta">Edit the diet</string>
+    <string name="title_opciones_menu">Settings</string>
+
+    <!-->Comidas</-->
+    <string name="dieta_desayuno">Breakfast</string>
+    <string name="dieta_mediamanana">Mid-morning meal</string>
+    <string name="dieta_comida">Lunch</string>
+    <string name="dieta_merienda">Snack</string>
+    <string name="dieta_cena">Dinner</string>
+
+    <!-->Días semana</-->
+    <string name="dia_lunes">Monday</string>
+    <string name="dia_martes">Tuesday</string>
+    <string name="dia_miercoles">Wednesday</string>
+    <string name="dia_jueves">Thursday</string>
+    <string name="dia_viernes">Friday</string>
+    <string name="dia_sabado">Saturday</string>
+    <string name="dia_domingo">Sunday</string>
+
+    <!-->Botones generar dieta</-->
+    <string name="generar_dieta">Make a diet</string>
+    <string name="description_editar">Edit</string>
+    <string name="generarPdf">Regenerate PDF</string>
+
+
+    <!-->Recetas</-->
+    <string name="receta_buscar">Search</string>
+    <string name="agregar_nueva_receta">Add new recipe</string>
+    <string name="editar_receta">Edit recipe</string>
+    <string name="compartir_receta">Share recipe</string>
+    <string name="agregar_nombre">Name</string>
+    <string name="agregar_categorias">Categories</string>
+    <string name="boton_agregar_categoria">Add ingredient button</string>
+    <string name="boton_agregar_receta">Add recipe button</string>
+    <string name="agregar_preparacion">Cooking</string>
+    <string name="agregar_ingredientes">Ingredients</string>
+    <string name="agregar_enlace">Link to recipe</string>
+    <string name="agregar_calorias">Calories approx. (kcal)</string>
+    <string name="agregar_bt">Add</string>
+    <string name="agregar_hora_comida">Time for this meal</string>
+    <string name="eliminar_receta">Delete recipe</string>
+    <string name="avisoRepe">You have already added </string>
+    <string name="avisoMinimo">The recipe needs at least one name, category and time</string>
+    <string name="avisoExiste">This recipe already exists</string>
+
+
+    <!-- >Confirmación<-->
+    <string name="si">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">Ok</string>
+    <string name="copiar_compra">Copy shopping list</string>
+    <string name="copiar_compra_exito">List copied to clipboard</string>
+    <string name="cancelar">Operation has been canceled</string>
+
+    <string name="compartir_con">Share with</string>
+
+
+    <!--> Generar dieta <-->
+    <string name="aviso_acompanamiento">You need at least one accompaniment for your first dish</string>
+    <string name="aviso_mediodia">You need at least 7 full or combined lunchs for the type of diet you are using</string>
+    <string name="aviso_cena">You need at least 7 full or combined dinners for the type of diet you are using</string>
+    <string name="aviso_desayuno">You need at least 1 breakfast</string>
+    <string name="pdf_guardado">PDF saved in:</string>
+    <string name="pdf_error">Error saving PDF</string>
+    <string name="pdf_titulo">Recipe created successfully!</string>
+    <string name="pdf_volver_generar">There is no diet currently maked</string>
+    <string name="dieta_tipo">Diet type</string>
+    <string name="dieta_fav">Favorite recipes for the next diet</string>
+    <string name="dieta_actualizar_preferencias">Update preferences</string>
+
+    <!--> Opciones <-->
+    <string name="opcion_menu_copia">Backup</string>
+    <string name="opcion_menu_tema">Use dark theme</string>
+    <string name="opcion_menu_idioma">Language</string>
+
+
+
+    <!-->Categorías para buscar recetas</-->
+    <string-array name="receta_categoria">
+        <item>All</item> <!--0-->
+        <item>Meat</item><!--1-->
+        <item>Fish</item><!--2-->
+        <item>Legumes</item><!--3-->
+        <item>Cereal</item><!--4-->
+        <item>Egg</item><!--5-->
+        <item>Vegetable</item><!--6-->
+        <item>Fruit</item><!--7-->
+        <item>Dairy</item><!--8-->
+        <item>Complete meal</item><!--9-->
+        <item>First dish</item><!--10-->
+        <item>Accompaniment</item><!--11-->
+        <item>Lunch</item><!--12-->
+        <item>Breakfast</item><!--13-->
+        <item>Mid-morning</item><!--14-->
+        <item>Snack</item><!--15-->
+        <item>Dinner</item><!--16-->
+        <item>Dessert</item><!--17-->
+    </string-array>
+
+    <!-->Tipos de dietas</-->
+    <string-array name="dieta_tipo">
+        <item>Omnivorous</item>
+        <item>Vegetarian</item>
+        <item>Vegan</item>
+    </string-array>
+
+    <!-->Spinner idiomas</-->
+    <string-array name="spinner_idiomas">
+        <item>Español</item>
+        <item>English</item>
+    </string-array>
+</resources>
