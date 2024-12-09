@@ -3,14 +3,15 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.graphics.pdf.PdfDocument
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
+import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -66,7 +67,7 @@ class DietaViewModel : ViewModel() {
     lateinit var arrayNombres: Array<String>
 
 
-    fun generarDieta(baseGuardado: SQLiteDatabase, context: Context, diasSemana: List<String>, dieta : Int) {
+    fun generarDieta(baseGuardado: SQLiteDatabase, context: Context, diasSemana: List<String>, dieta : Int, savedPrimerDia : Int) {
         arrayNombres = context.resources.getStringArray(R.array.receta_categoria)
         //Cargamos los datos de recetas en sus arrays
         val todoCorrecto = cargarRecetas(baseGuardado, dieta)
@@ -337,24 +338,6 @@ class DietaViewModel : ViewModel() {
             listaRepeticiones.shuffled().forEach {
 
                 if (dataDesayuno.size >= 1) {
-                   /* var coincideD = false
-                    var idD = 0
-                    for (item in 0 until arrayFav.size) {
-                        if (arrayFav[item].categoria.contains(arrayNombres.getOrElse(13) { "Desayuno" })
-                        ) {
-                            semanaDesayuno[dia] = arrayFav[item]
-                            coincideD = true
-                            idD = item
-                        }
-                    }
-                    if (coincideD) {
-                        arrayFav.removeAt(idD)
-                        Log.d("or2", arrayFav.toString())
-
-                    }
-
-
-                    */
                     val receta = arrayFav.firstOrNull { it.horas.contains(13)  }
                     if (receta != null) {
                         semanaDesayuno[dia] = receta
@@ -393,22 +376,6 @@ class DietaViewModel : ViewModel() {
                     }
                 }
                 if (dataMediamanana.size >= 1) {
-                    /*var coincideMedia = false
-                    var idMedia = 0
-                    for (item in 0 until arrayFav.size) {
-                        if (arrayFav[item].categoria.contains(arrayNombres.getOrElse(14) { "Mediamañana" })
-                        ) {
-                            semanaMediamanana[dia] = arrayFav[item]
-                            coincideMedia = true
-                            idMedia = item
-                        }
-                    }
-                    if (coincideMedia) {
-                        arrayFav.removeAt(idMedia)
-                        Log.d("or2acco", arrayFav.toString())
-                    }
-
-                     */
                     val receta = arrayFav.firstOrNull { it.horas.contains(14) }
                     if (receta != null) {
                         semanaDesayuno[dia] = receta
@@ -447,21 +414,6 @@ class DietaViewModel : ViewModel() {
                     }
 
                 }
-                /*var coincideMedio = false
-                var idMedio = 0
-                for (item in 0 until arrayFav.size) {
-                    if (arrayFav[item].categoria.contains(arrayNombres.getOrElse(12) { "Comida mediodía" })
-                    ) {
-                        semanaMediodia[dia] = arrayFav[item]
-                        coincideMedio = true
-                        idMedio = item
-                    }
-                }
-                if (coincideMedio) {
-                    arrayFav.removeAt(idMedio)
-                    Log.d("or2com", arrayFav.toString())
-                }
-                if (semanaMediodia[dia].nombre == "") { */
                 val semanaOcupada = setOf<Int>(
                     semanaMediodia[1].id!!.toInt(),
                     semanaMediodia[2].id!!.toInt(),
@@ -479,23 +431,6 @@ class DietaViewModel : ViewModel() {
 
 
                 if (semanaMediodia[dia].horas.contains(10)) {
-                       /* var coincide = false
-                        var id = 0
-                        for (item in 0 until arrayFav.size) {
-                            if (arrayFav[item].categoria.contains(arrayNombres.getOrElse(11) { "Acompañamiento" }) && arrayFav[item].categoria.contains(
-                                    arrayNombres.getOrElse(12) { "Comida mediodía" }
-                                )) {
-                                semanaAcompanamientoMediodia[dia] = arrayFav[item]
-                                coincide = true
-                                id = item
-                            }
-                        }
-                        if (coincide) {
-                            arrayFav.removeAt(id)
-                            Log.d("or2Po", arrayFav.toString())
-                        }
-
-                        */
                     val receta = arrayFav.firstOrNull { it.horas.contains(11) && it.horas.contains(12) }
                     if (receta != null) {
                         semanaDesayuno[dia] = receta
@@ -541,26 +476,8 @@ class DietaViewModel : ViewModel() {
                                     }
                                 }
                             }
-                        //}
                     }
                 }
-
-              /*  var coincidePo = false
-                var idPo = 0
-            for (item in 0 until arrayFav.size) {
-                if (arrayFav[item].categoria.contains(arrayNombres.getOrElse(17) { "Postre" })
-                ) {
-                    semanaPostre[dia] = arrayFav[item]
-                    coincidePo = true
-                    idPo = item
-                }
-            }
-                if (coincidePo) {
-                    arrayFav.removeAt(idPo)
-                    Log.d("or2Po", arrayFav.toString())
-                }
-
-               */
                 val receta = arrayFav.firstOrNull { it.horas.contains(17) }
                 if (receta != null) {
                     semanaDesayuno[dia] = receta
@@ -601,23 +518,6 @@ class DietaViewModel : ViewModel() {
             }
 
                 if (dataMerienda.size >= 1) {
-                    /*
-                    var coincideMer = false
-                    var idMer = 0
-                    for (item in 0 until arrayFav.size){
-                        if (arrayFav[item].categoria.contains(arrayNombres.getOrElse(15) { "Merienda" })
-                        ){
-                            semanaMerienda[dia] = arrayFav[item]
-                            coincideMer = true
-                            idMer = item
-                        }
-                    }
-                    if (coincideMer) {
-                        arrayFav.removeAt(idMer)
-                        Log.d("or2Mer", arrayFav.toString())
-
-                    }
-                    */
                     val receta = arrayFav.firstOrNull { it.horas.contains(15) }
                     if (receta != null) {
                         semanaDesayuno[dia] = receta
@@ -654,24 +554,6 @@ class DietaViewModel : ViewModel() {
                         }
                     }
                 }
-
-                /*var coincideCe = false
-                var idCe = 0
-                for (item in 0 until arrayFav.size){
-                    if (arrayFav[item].categoria.contains(arrayNombres.getOrElse(16) { "Cena" })
-                    ){
-                        semanaCena[dia] = arrayFav[item]
-                        coincideCe = true
-                        idCe = item
-                    }
-                }
-                if (coincideCe) {
-                    arrayFav.removeAt(idCe)
-                    Log.d("or2Ce", arrayFav.toString())
-                }
-                if (semanaCena[dia].nombre == "") {
-
-                 */
                 var cenaOcupada = setOf(
                     semanaCena[1].id!!.toInt(),
                     semanaCena[2].id!!.toInt(),
@@ -687,23 +569,6 @@ class DietaViewModel : ViewModel() {
                     arrayFav
                 )
                 if (semanaCena[dia].horas.contains(10)) {
-                   /* var coincide = false
-                    var id = 0
-                    for (item in 0 until arrayFav.size){
-                        if (arrayFav[item].categoria.contains(arrayNombres.getOrElse(11) { "Acompañamiento" }) && arrayFav[item].categoria.contains(
-                                arrayNombres.getOrElse(16) { "Cena" }
-                            )){
-                            semanaAcompanamientoCena[dia] = arrayFav[item]
-                            coincide = true
-                            id = item
-                        }
-                    }
-                    if (coincide) {
-                        arrayFav.removeAt(id)
-                        Log.d("or2AcMCe", arrayFav.toString())
-                    }
-
-                    */
                     val receta = arrayFav.firstOrNull { it.horas.contains(11) && it.horas.contains(16)}
                     if (receta != null) {
                         semanaDesayuno[dia] = receta
@@ -748,12 +613,11 @@ class DietaViewModel : ViewModel() {
                             }
                         }
                     }
-                //}
                 }
 
                 dia += 1
             }
-            crearMenuPdf(context, diasSemana, baseGuardado)
+            crearMenuPdf(context, diasSemana, baseGuardado, savedPrimerDia)
         }
     }
 
@@ -971,378 +835,6 @@ class DietaViewModel : ViewModel() {
     /**
      * Método para obtener un obtener las siete comidas del mediodía en la semana
      */
- /*   private fun obtenerMediodia(
-        cat: String,
-        idLunes: Int,
-        idMartes: Int,
-        idMiercoles: Int,
-        idJueves: Int,
-        idViernes: Int,
-        idSabado: Int,
-        idDomingo: Int,
-        dieta : Int,
-        arrayFav: java.util.ArrayList<Receta>
-    ): Receta {
-        when (cat) {
-            arrayNombres.getOrElse(1) { "Carne" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(12) { "Comida mediodía" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(1) { "Carne" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                        val resultados = dataMediodia.filter { receta ->
-                            (receta.categoria as? List<String>)?.contains(arrayNombres.getOrElse(1) { "Carne" }) == true
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        if (elegido == null) {
-                            val resultados = dataMediodia.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-            }
-
-            arrayNombres.getOrElse(2) { "Pescado" } -> {
-                var intento = 0
-                    var elegido: Receta?
-                    do {
-
-                        val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(12) { "Comida mediodía" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(2) { "Pescado" }) == true) && ((it.categoria as? List<String>)?.contains(
-                            arrayNombres.getOrElse(11) { "Acompañamiento" }
-                        ) == false)}
-
-                        if (receta != null) {
-                            elegido = receta
-                            arrayFav.remove(receta)
-                        } else {
-
-                            // Filtrar los registros cuyo segundo array contiene "carne"
-                    val resultados = dataMediodia.filter { receta ->
-                        (receta.categoria as? List<String>)?.contains(arrayNombres.getOrElse(2) { "Pescado" }) == true
-                    }
-                    // Elegir un registro al azar
-                    elegido =
-                        resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                    if (elegido ==null) {
-                        val resultados = dataMediodia.filter { receta ->
-                            ((receta.categoria as? List<String>)?.contains(
-                                arrayNombres.getOrElse(11) { "Acompañamiento" }
-                            ) == false)
-                        }
-                        elegido = resultados.randomOrNull()!!
-                    }
-                    intento += 1
-                            Log.d("erer", intento.toString())
-
-                        }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-
-                return elegido
-
-            }
-
-            arrayNombres.getOrElse(3) { "Legumbres" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(12) { "Comida mediodía" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(3) { "Legumbres" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-                        Log.d("erer", intento.toString())
-
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                        lateinit var resultados: List<Receta>
-
-                        when (dieta) {
-                            0 -> {
-                                resultados = dataMediodia.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            3
-                                        ) { "Legumbres" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false)
-                                }
-                            }
-                            1 -> {
-                                resultados = dataMediodia.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            3
-                                        ) { "Legumbres" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false)
-                                }
-
-                            }
-                            2 -> {
-                                resultados = dataMediodia.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            3
-                                        ) { "Legumbres" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(6) { "Huevo" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(9) { "Lácteo" }
-                                    ) == false)
-                                }
-                            }
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-
-                        if (elegido == null) {
-                            val resultados = dataMediodia.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-
-            }
-
-            arrayNombres.getOrElse(4) { "Cereal" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(12) { "Comida mediodía" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(4) { "Cereal" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                    lateinit var resultados: List<Receta>
-                    when (dieta) {
-                        0 -> {
-                            resultados = dataMediodia.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(
-                                        4
-                                    ) { "Cereal" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                        }
-                        1 -> {
-                            resultados = dataMediodia.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(
-                                        4
-                                    ) { "Cereal" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(1) { "Carne" }
-                                ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(2) { "Pescado" }
-                                ) == false)
-                            }
-
-                        }
-                        2 -> {
-                            resultados = dataMediodia.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(
-                                        4
-                                    ) { "Cereal" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(1) { "Carne" }
-                                ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(2) { "Pescado" }
-                                ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(6) { "Huevo" }
-                                ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(9) { "Lácteo" }
-                                ) == false)
-                            }
-                        }
-                    }
-                    // Elegir un registro al azar
-                    elegido =
-                        resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-
-                    if (elegido == null) {
-                        val resultados = dataMediodia.filter { receta ->
-                            ((receta.categoria as? List<String>)?.contains(
-                                arrayNombres.getOrElse(11) { "Acompañamiento" }
-                            ) == false)
-                        }
-                        elegido = resultados.randomOrNull()!!
-                    }
-                    intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-
-            }
-
-            arrayNombres.getOrElse(5) { "Huevo" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(12) { "Comida mediodía" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(5) { "Huevo" }) == true) }
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                        lateinit var resultados: List<Receta>
-                        when (dieta) {
-                            0 -> {
-                                resultados = dataMediodia.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            5
-                                        ) { "Huevo" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false)
-                                }
-                            }
-                            1 -> {
-                                resultados = dataMediodia.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            5
-                                        ) { "Huevo" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false)
-                                }
-
-                            }
-                            2 -> {
-                                resultados = dataMediodia.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            5
-                                        ) { "Huevo" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(6) { "Huevo" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(9) { "Lácteo" }
-                                    ) == false)
-                                }
-                            }
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        if (elegido == null) {
-                            val resultados = dataMediodia.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-
-            }
-
-            else -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(12) { "Comida mediodía" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(6) { "Verdura" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false)}
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                        val resultados = dataMediodia.filter { receta ->
-                            (receta.categoria as? List<String>)?.contains(arrayNombres.getOrElse(5) { "Verdura" }) == true
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        if (elegido == null) {
-                            val resultados = dataMediodia.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-
-            }
-        }
-    }
-
-  */
     private fun obtenerMediodia(
         categoria: Int,
         idsOcupados: Set<Int>,
@@ -1394,7 +886,6 @@ class DietaViewModel : ViewModel() {
                 (receta.horas as? List<Int>)?.contains(11) == false
             }}
         }
-        Log.d("crit", arrayFiltrado.toString())
 
         // Si no hay recetas candidatas que cumplan los criterios, relajar los criterios
         val recetasCandidatasAmpliadas = if (arrayFiltrado.isEmpty()) {
@@ -1424,8 +915,6 @@ class DietaViewModel : ViewModel() {
             arrayFiltrado
         }
 
-        Log.d("ampl", recetasCandidatasAmpliadas.toString())
-
         //Comprobamos si alguna receta en la lista coincide con alguna en la lista de favoritas
         for (fav in 0 until  arrayFav.size) {
             for (element in arrayFiltrado)
@@ -1442,378 +931,7 @@ class DietaViewModel : ViewModel() {
     /**
      * Método para obtener las siete cenas de la semana.
      */
-  /*  private fun obtenerCena(
-        cat: String,
-        idLunes: Int,
-        idMartes: Int,
-        idMiercoles: Int,
-        idJueves: Int,
-        idViernes: Int,
-        idSabado: Int,
-        idDomingo: Int,
-        dieta : Int,
-        arrayFav : java.util.ArrayList<Receta>
-    ): Receta {
-        when (cat) {
-            arrayNombres.getOrElse(1) { "Carne" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
 
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(16) { "Cena" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(1) { "Carne" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-                    Log.d("ioCe", receta.toString())
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                        val resultados = dataCena.filter { receta ->
-                            ((receta.categoria as? List<String>)?.contains(arrayNombres.getOrElse(1) { "Carne" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                arrayNombres.getOrElse(11) { "Acompañamiento" }
-                            ) == false)
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        intento += 1
-                        if (elegido.nombre == "") {
-                            val resultados = dataCena.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-            }
-
-            arrayNombres.getOrElse(2) { "Pescado" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(16) { "Cena" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(2) { "Pescado" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                        val resultados = dataCena.filter { receta ->
-                            ((receta.categoria as? List<String>)?.contains(arrayNombres.getOrElse(2) { "Pescado" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                arrayNombres.getOrElse(11) { "Acompañamiento" }
-                            ) == false)
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        if (elegido.nombre == "") {
-                            val resultados = dataCena.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-
-                return elegido
-
-            }
-
-            arrayNombres.getOrElse(3) { "Legumbres" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(16) { "Cena" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(3) { "Legumbres" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                        lateinit var resultados: List<Receta>
-                        when (dieta) {
-                            0 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            3
-                                        ) { "Legumbres" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false)
-                                }
-                            }
-                            1 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            3
-                                        ) { "Legumbres" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false)
-                                }
-
-                            }
-                            2 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            3
-                                        ) { "Legumbres" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(6) { "Huevo" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(9) { "Lácteo" }
-                                    ) == false)
-                                }
-                            }
-                        }
-
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        if (elegido == null) {
-                            resultados = dataCena.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-
-            }
-
-            arrayNombres.getOrElse(4) { "Cereal" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(16) { "Cena" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(4) { "Cereal" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-                        lateinit var resultados: List<Receta>
-                        when (dieta) {
-                            0 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            4
-                                        ) { "Cereal" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false)
-                                }
-                            }
-                            1 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            4
-                                        ) { "Cereal" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false)
-                                }
-
-                            }
-                            2 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            4
-                                        ) { "Cereal" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(6) { "Huevo" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(9) { "Lácteo" }
-                                    ) == false)
-                                }
-                            }
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        if (elegido == null) {
-                            val resultados = dataCena.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-
-            }
-
-            arrayNombres.getOrElse(5) { "Huevo" } -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(16) { "Cena" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(5) { "Huevo" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-                        lateinit var resultados: List<Receta>
-                        when (dieta) {
-                            0 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            5
-                                        ) { "Huevo" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false)
-                                }
-                            }
-                            1 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            5
-                                        ) { "Huevo" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false)
-                                }
-
-                            }
-                            2 -> {
-                                resultados = dataCena.filter { receta ->
-                                    ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(
-                                            5
-                                        ) { "Huevo" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(1) { "Carne" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(2) { "Pescado" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(6) { "Huevo" }
-                                    ) == false) && ((receta.categoria as? List<String>)?.contains(
-                                        arrayNombres.getOrElse(9) { "Lácteo" }
-                                    ) == false)
-                                }
-                            }
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        if (elegido.nombre == "") {
-                            val resultados = dataCena.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-
-            }
-
-            else -> {
-                var intento = 0
-                var elegido : Receta?
-                do {
-
-                    val receta = arrayFav.firstOrNull { it.categoria.contains(arrayNombres.getOrElse(16) { "Cena" }) && ((it.categoria as? List<String>)?.contains(arrayNombres.getOrElse(6) { "Verdura" }) == true) && ((it.categoria as? List<String>)?.contains(
-                        arrayNombres.getOrElse(11) { "Acompañamiento" }
-                    ) == false) }
-                    Log.d("ioCe", receta.toString())
-
-                    if (receta != null) {
-                        elegido = receta
-                        arrayFav.remove(receta)
-                    } else {
-                        // Filtrar los registros cuyo segundo array contiene "carne"
-                        val resultados = dataCena.filter { receta ->
-                            ((receta.categoria as? List<String>)?.contains(arrayNombres.getOrElse(6) { "Verdura" }) == false) && ((receta.categoria as? List<String>)?.contains(
-                                arrayNombres.getOrElse(11) { "Acompañamiento" }
-                            ) == false)
-                        }
-                        // Elegir un registro al azar
-                        elegido =
-                            resultados.randomOrNull()!! // randomOrNull devuelve null si la lista está vacía
-                        if (elegido.nombre == "") {
-                            val resultados = dataCena.filter { receta ->
-                                ((receta.categoria as? List<String>)?.contains(
-                                    arrayNombres.getOrElse(11) { "Acompañamiento" }
-                                ) == false)
-                            }
-                            elegido = resultados.randomOrNull()!!
-                        }
-                        intento += 1
-                        Log.d("erer", intento.toString())
-
-                    }
-                } while ((elegido!!.id == idLunes || elegido.id == idMartes || elegido.id == idMiercoles || elegido.id == idJueves || elegido.id == idViernes || elegido.id == idSabado || elegido.id == idDomingo) && intento <= 3)
-                return elegido
-
-            }
-        }
-    }
-   */
     private fun obtenerCena(
         categoria: Int,
         idsOcupados: Set<Int>,
@@ -1912,7 +1030,114 @@ class DietaViewModel : ViewModel() {
     /**
      * Método extralargo para dibujar y guardar la dieta en pdf.
      */
-    fun crearMenuPdf(context: Context, diasSemana: List<String>, baseGuardado: SQLiteDatabase) {
+    fun crearMenuPdf(context: Context, semana: List<String>, baseGuardado: SQLiteDatabase, savedPrimerDia: Int) {
+
+        Log.d("dia", savedPrimerDia.toString())
+        val diasSemana = if (savedPrimerDia == 1) {
+            // Obtener el último elemento
+            val lastElement = semana.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semana.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElement) // Insertar el último elemento en la posición 1
+            }
+        } else {
+            semana
+        }
+
+        var semanaArregladaDesayuno = mutableListOf<Receta>()
+        var semanaArregladaMediamanana= mutableListOf<Receta>()
+        var semanaArregladaMediodia = mutableListOf<Receta>()
+        var semanaArregladaAcompanamientoMediodia= mutableListOf<Receta>()
+        var semanaArregladaPostre = mutableListOf<Receta>()
+        var semanaArregladaMerienda= mutableListOf<Receta>()
+        var semanaArregladaCena = mutableListOf<Receta>()
+        var semanaArregladaAcompanamientoCena= mutableListOf<Receta>()
+
+        if(savedPrimerDia == 1) {
+            // Obtener el último elemento
+            val lastElementDesa = semanaDesayuno.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semanaArregladaDesayuno = semanaDesayuno.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElementDesa) // Insertar el último elemento en la posición 1
+            }
+
+            // Obtener el último elemento
+            val lastElementMedia = semanaMediamanana.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semanaArregladaMediamanana = semanaMediamanana.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElementMedia) // Insertar el último elemento en la posición 1
+            }
+
+            // Obtener el último elemento
+            val lastElementMedio = semanaMediodia.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semanaArregladaMediodia = semanaMediodia.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElementMedio) // Insertar el último elemento en la posición 1
+            }
+
+            // Obtener el último elemento
+            val lastElementAcMedio = semanaAcompanamientoMediodia.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semanaArregladaAcompanamientoMediodia = semanaAcompanamientoMediodia.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElementAcMedio) // Insertar el último elemento en la posición 1
+            }
+
+            // Obtener el último elemento
+            val lastElementPostre = semanaPostre.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semanaArregladaPostre = semanaPostre.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElementPostre) // Insertar el último elemento en la posición 1
+            }
+
+            // Obtener el último elemento
+            val lastElementMerienda = semanaMerienda.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semanaArregladaMerienda = semanaMerienda.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElementMerienda) // Insertar el último elemento en la posición 1
+            }
+
+            // Obtener el último elemento
+            val lastElementCena = semanaCena.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semanaArregladaCena = semanaCena.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElementCena) // Insertar el último elemento en la posición 1
+            }
+
+            // Obtener el último elemento
+            val lastElementAcCena = semanaAcompanamientoCena.last()
+
+            // Crear una nueva lista con el último elemento insertado entre el índice 0 y 1
+            semanaArregladaAcompanamientoCena = semanaAcompanamientoCena.toMutableList().apply {
+                removeAt(size - 1) // Eliminar el último elemento
+                add(1, lastElementAcCena) // Insertar el último elemento en la posición 1
+            }
+        } else {
+            semanaArregladaDesayuno = semanaDesayuno
+            semanaArregladaMediamanana = semanaMediamanana
+            semanaArregladaMediodia = semanaMediodia
+            semanaArregladaAcompanamientoMediodia = semanaAcompanamientoMediodia
+            semanaArregladaPostre = semanaPostre
+            semanaArregladaMerienda = semanaMerienda
+            semanaArregladaCena = semanaCena
+            semanaArregladaAcompanamientoCena =semanaAcompanamientoCena
+        }
+
 
         val pdfDocument = PdfDocument()
         //Creamos una hoja con las medidas A4
@@ -1934,6 +1159,31 @@ class DietaViewModel : ViewModel() {
         textPaint.color = Color.BLACK
         textPaint.style = Paint.Style.FILL
 
+        val drawable: Drawable? = ContextCompat.getDrawable(context, R.drawable.icono_app_fondo)
+
+        // Dibujar el ícono como fondo, ajustando posición y tamaño
+        if (drawable != null) {
+            val paintIcon = Paint()
+            paintIcon.alpha = 40 // Ajusta el valor entre 0 (totalmente transparente) y 255 (totalmente opaco)
+            fun drawableToBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
+                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(bitmap)
+                drawable.setBounds(0, 0, width, height)
+                drawable.draw(canvas)
+                return bitmap
+            }
+            // Convertir el drawable a bitmap
+            val iconBitmap = drawableToBitmap(drawable, 500, 500) // Ajusta el tamaño según necesites
+
+            canvas.drawBitmap(iconBitmap, 100f, 60f, paintIcon)  // Ajusta las coordenadas según necesites
+        } else {
+            println("Error: No se pudo cargar el drawable.")
+
+        }
+
+        // Dibujar otros elementos, como una tabla o texto
+        paint.textSize = 14f
+
         // Dimensiones de la tabla
         val startX = 40f
         val startY = 40f
@@ -1954,16 +1204,18 @@ class DietaViewModel : ViewModel() {
                 val right = left + cellWidth
                 //Y un alto u otro
                 val bottom =
-                    if (row == 0) top + headerHeight else if (row == 2 || row == 4) top + medioHeight else if (row == 3 || row == 5) top + granHeight else top + cellHeight
+                    if (row == 0) top + headerHeight else if (row == 2 || row == 4) top + (medioHeight-10) else if (row == 3 || row == 5) top + granHeight else top + cellHeight
 
                 // Dibuja el fondo blanco para las celdas
                 val backgroundPaint = Paint()
                 backgroundPaint.color = if (row == 0 || col == 0) ContextCompat.getColor(
                     context,
                     R.color.green_200
-                ) else Color.WHITE
+                ) else Color.TRANSPARENT
                 backgroundPaint.style = Paint.Style.FILL
                 canvas.drawRect(left, top, right, bottom, backgroundPaint)
+
+
 
                 // Dibuja los bordes
                 canvas.drawRect(left, top, right, bottom, paint)
@@ -1983,23 +1235,23 @@ class DietaViewModel : ViewModel() {
                     var text = ""
                     when (row) {
                         1 -> {
-                            text = semanaDesayuno[col].nombre.toString()
+                            text = semanaArregladaDesayuno[col].nombre.toString()
                         }
                         2 -> {
-                            text = semanaMediamanana[col].nombre.toString()
+                            text = semanaArregladaMediamanana[col].nombre.toString()
                         }
                         3 -> {
                             //En el caso del mediodía, juntamos la comida, acompañamiento y postre
                             text =
-                                "${semanaMediodia[col].nombre.toString()} \\n ${semanaAcompanamientoMediodia[col].nombre.toString()} \\n ${semanaPostre[col].nombre.toString()}"
+                                "${semanaArregladaMediodia[col].nombre.toString()} \\n ${semanaArregladaAcompanamientoMediodia[col].nombre.toString()} \\n ${semanaArregladaPostre[col].nombre.toString()}"
                         }
                         4 -> {
-                            text = semanaMerienda[col].nombre.toString()
+                            text = semanaArregladaMerienda[col].nombre.toString()
                         }
                         5 -> {
                             //En el caso de la cena, juntamos la comida, acompañamiento y postre
                             text =
-                                "${semanaCena[col].nombre.toString()} \\n ${semanaAcompanamientoCena[col].nombre.toString()} \\n ${semanaPostre[col].nombre.toString()}"
+                                "${semanaArregladaCena[col].nombre.toString()} \\n ${semanaArregladaAcompanamientoCena[col].nombre.toString()} \\n ${semanaArregladaPostre[col].nombre.toString()}"
 
                         }
                     }
@@ -2025,7 +1277,7 @@ class DietaViewModel : ViewModel() {
         //Obtenemos el día y la hora para evitar duplicados en el nombre
         val sdf = SimpleDateFormat("dd-M-yyyy hh.mm.ss")
         val currentDate = sdf.format(Date())
-        val fileName = "MenuSemanal_$currentDate.pdf"
+        val fileName = "${R.string.nombre_archivo}$currentDate.pdf"
 
         //En función de la versión de android, lo imprimimos de una manera u otra
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -2189,7 +1441,7 @@ class DietaViewModel : ViewModel() {
                     //Notificamos al usuario con un dialog
                     val ostiaPdf = AlertDialog.Builder(context)
                     ostiaPdf.setTitle(context.getString(R.string.pdf_titulo))
-                    ostiaPdf.setMessage(context.getString(R.string.pdf_guardado) + " $directory$fileName")
+                    ostiaPdf.setMessage(context.getString(R.string.pdf_guardado) + " $directory/$fileName")
 
                     ostiaPdf.setPositiveButton(R.string.ok) { dialog, which ->
 
@@ -2269,7 +1521,6 @@ class DietaViewModel : ViewModel() {
                         _mostrarToast.value = R.string.copiar_compra_exito
                     }
                     ostiaPdf.show()
-
                 }
 
             } catch (e: Exception) {
@@ -2278,12 +1529,10 @@ class DietaViewModel : ViewModel() {
 
             }
         }
-
-
         // Guarda el PDF en almacenamiento externo
         val directory =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-        val file = File(directory, "MenuSemanal_$currentDate.pdf")
+        val file = File(directory, "${R.string.nombre_archivo}$currentDate.pdf")
         pdfDocument.writeTo(FileOutputStream(file))
         pdfDocument.close()
     }
@@ -2387,7 +1636,7 @@ class DietaViewModel : ViewModel() {
     /**
      * Método para volver a generar el pdf de la actual dieta
      */
-    fun volverAGenerarPdf(context: Context, diasSemana: List<String>, baseGuardado: SQLiteDatabase){
+    fun volverAGenerarPdf(context: Context, diasSemana: List<String>, baseGuardado: SQLiteDatabase, savedPrimerDia: Int){
         //Limpiamos los arrays para evitar duplicados
         semanaDesayuno.clear()
         semanaMediamanana.clear()
@@ -2522,7 +1771,7 @@ class DietaViewModel : ViewModel() {
         }
         cursor.close()
         //Llamamos al crear pdf
-        crearMenuPdf(context, diasSemana, baseGuardado)
+        crearMenuPdf(context, diasSemana, baseGuardado, savedPrimerDia)
 
     }
 }

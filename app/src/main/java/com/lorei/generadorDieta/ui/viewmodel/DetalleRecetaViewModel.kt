@@ -84,6 +84,8 @@ class DetalleRecetaViewModel() : ViewModel() {
                     )
                 }
             }
+            cursorReceta.close()
+            cursor.close()
         }
         return receta
     }

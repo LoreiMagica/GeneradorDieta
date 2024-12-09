@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -37,6 +38,7 @@ class ListaRecetasFragment : Fragment() {
 
         //Llamamos al método para obtener estas
         viewModel.cargarRecetas(baseGuardado)
+        baseGuardado.close()
 
         // Se inicializa el listado de enlaces
         binding.listaRecetas.apply {
@@ -46,6 +48,12 @@ class ListaRecetasFragment : Fragment() {
 
         //Seteamos la función del botón agregar receta
         binding.agregarReceta.setOnClickListener { findNavController().navigate(R.id.nav_agregar_receta) }
+
+        // Listener para el clic prolongado
+        binding.agregarReceta.setOnLongClickListener {
+            Toast.makeText(requireContext(), R.string.explica_btAgregar, Toast.LENGTH_SHORT).show()
+            true // Devuelve true para indicar que el evento fue manejado
+        }
 
         //Y la de los detalles de la receta
         viewModel.adapter!!.setOnClickListener(object : ListaRecetasAdapter.OnClickListener {

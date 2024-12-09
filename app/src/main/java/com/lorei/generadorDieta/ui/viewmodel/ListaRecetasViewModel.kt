@@ -104,6 +104,8 @@ class ListaRecetasViewModel() : ViewModel() {
                     data.add(receta)
                 }
             }
+            cursorReceta.close()
+            cursor.close()
         }
     }
 

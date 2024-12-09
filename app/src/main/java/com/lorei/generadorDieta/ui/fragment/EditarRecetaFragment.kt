@@ -2,6 +2,7 @@ package com.lorei.generadorDieta.ui.fragment
 
 import EditarRecetaViewModel
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -16,6 +17,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.lorei.generadorDieta.R
@@ -182,13 +184,14 @@ class EditarRecetaFragment : Fragment() {
 
         //Hacemos lo mismo con los ingredientes. Al pulsar el botón, comprueba si existe y lo agrega o no
         binding.botonAgregarIngrediente.setOnClickListener {
-            binding.etIngredientes.setText(
+            if (binding.etIngredientes.text.toString().isNotEmpty()) {
+
+                binding.etIngredientes.setText(
                 binding.etIngredientes.text.toString().substring(0, 1).uppercase() +
                         binding.etIngredientes.text.toString().substring(1).lowercase(),
             )
-            val inputText = binding.etIngredientes.text.toString().trim()
+                val inputText = binding.etIngredientes.text.toString().trim()
 
-            if (inputText.isNotEmpty()) {
                 // Agregar el chip solo si no existe ya
                 if (!isChipAlreadyAdded(inputText, binding.listaIngredientes)) {
                     addChipToGroup(inputText, binding.listaIngredientes)
@@ -242,6 +245,14 @@ class EditarRecetaFragment : Fragment() {
                     .show()
             }
             }
+
+        // Mostrar una explicación detallada al pulsar el botón
+        binding.helpButton.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.agregar_calorias)
+                .setMessage(R.string.explicacion_calorias_texto)
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .show()        }
 
         return binding.root
     }
@@ -320,7 +331,10 @@ private fun isChipAlreadyAdded(text: String, chipGroup: ChipGroup): Boolean {
             Toast.makeText(context, "Error: No se encontró la receta", Toast.LENGTH_SHORT).show()
         }
         baseGuardado.close()
-        findNavController().navigate(R.id.nav_receta)
+        findNavController().navigate(R.id.nav_receta, null,
+            navOptions {
+                popUpTo(R.id.nav_editar_receta) { inclusive = true } // Elimina pantallaA del stack de navegación
+            })
 
     }
 }

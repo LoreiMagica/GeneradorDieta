@@ -2,6 +2,7 @@ package com.lorei.generadorDieta.ui.fragment
 
 import ListaRecetasViewModel
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -16,6 +17,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.lorei.generadorDieta.R
@@ -42,13 +44,15 @@ class AgregarRecetaFragment : Fragment() {
 
         //Hacemos lo mismo con los ingredientes. Al pulsar el botón, comprueba si existe y lo agrega o no
         binding.botonAgregarIngrediente.setOnClickListener {
-            binding.etIngredientes.setText(
+
+            if (binding.etIngredientes.text.toString().isNotEmpty()) {
+
+                binding.etIngredientes.setText(
                 binding.etIngredientes.text.toString().substring(0, 1).uppercase() +
                         binding.etIngredientes.text.toString().substring(1).lowercase(),
             )
-            val inputText = binding.etIngredientes.text.toString().trim()
 
-            if (inputText.isNotEmpty()) {
+                val inputText = binding.etIngredientes.text.toString().trim()
                 // Agregar el chip solo si no existe ya
                 if (!isChipAlreadyAdded(inputText, binding.listaIngredientes)) {
                     addChipToGroup(inputText, binding.listaIngredientes)
@@ -167,6 +171,7 @@ class AgregarRecetaFragment : Fragment() {
                     cursorReceta.close()
                 }
                 cursor.close()
+                bd.close()
 
                 //Si no existe, se agrega
                 if (!existe){
@@ -184,6 +189,14 @@ class AgregarRecetaFragment : Fragment() {
                     .show()
             }
             }
+
+        // Mostrar una explicación detallada al pulsar el botón
+        binding.helpButton.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.agregar_calorias)
+                .setMessage(R.string.explicacion_calorias_texto)
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .show()        }
 
         return binding.root
     }
@@ -270,7 +283,10 @@ private fun isChipAlreadyAdded(text: String, chipGroup: ChipGroup): Boolean {
         //Intertamos y cerramos la conexión
         baseGuardado.insert("recetas", null, registro)
         baseGuardado.close()
-        findNavController().navigate(R.id.nav_receta)
+        findNavController().navigate(R.id.nav_receta, null,
+            navOptions {
+                popUpTo(R.id.nav_agregar_receta) { inclusive = true } // Elimina pantallaA del stack de navegación
+            })
 
     }
 }

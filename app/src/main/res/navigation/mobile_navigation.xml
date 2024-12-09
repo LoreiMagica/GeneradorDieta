@@ -44,5 +44,10 @@
         android:name="com.lorei.generadorDieta.ui.fragment.OpcionesMenuFragment"
         android:label="@string/title_opciones_menu"
         tools:layout="@layout/opciones_main_layout" />
+    <fragment
+        android:id="@+id/nav_opciones_backup"
+        android:name="com.lorei.generadorDieta.ui.fragment.OpcionesCopiaLocalFragment"
+        android:label="@string/opcion_menu_copia"
+        tools:layout="@layout/opciones_copia_local_layout" />
 
 </navigation>

@@ -3,21 +3,26 @@ package com.lorei.generadorDieta.ui.fragment
 import DietaViewModel
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
+import android.app.AlertDialog
+import android.content.*
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.FrameLayout
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -44,6 +49,48 @@ class DietaFragment : Fragment() {
     ): View {
         binding = DietaLayoutBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[DietaViewModel::class.java]
+
+        primeraVez()
+
+        val basePdf = requireActivity().openOrCreateDatabase(
+            "baseGuardado.db",
+            Context.MODE_PRIVATE,
+            null
+        )
+        //Hacemos la consulta a la BBDD
+        val cursor: Cursor = basePdf.rawQuery(
+            "Select name from sqlite_master where type = 'table' and name like 'dietaActual' ",
+            null
+        )
+        if (cursor.count > 0) {
+            //Accedemos a la tabla dietaActual en la base de datos
+            val cursorReceta: Cursor = basePdf.rawQuery(
+                "select numero, desayuno, mediamanana, comida, acompanamientoComida, postre, merienda, cena, acompanamientoCena from dietaActual where numero=1",
+                null
+            )
+
+            //Procesamos los datos obtenidos
+            if (cursorReceta.count > 0) {
+                while (cursorReceta.moveToNext()) {
+
+                    //Obtenemos y convertimos los datos de gson
+                    val jsonD =
+                        cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("desayuno"))
+                    //Comprobamos que los datos obtenidos sean un array y no esté vacío
+                    if (jsonD != "desayuno") {
+                        binding.noDietaFondo.visibility = View.GONE
+                        binding.noDieta.visibility = View.GONE
+                    }
+                }
+            }
+            cursorReceta.close()
+            cursor.close()
+            basePdf.close()
+        }else {
+            binding.noDieta.visibility = View.VISIBLE
+            binding.noDietaFondo.visibility =View.VISIBLE
+        }
+
 
 
         //Seteamos los números en el calendario
@@ -213,10 +260,14 @@ class DietaFragment : Fragment() {
                     clipboard.setPrimaryClip(clip)
                 }
 
+                //Obtenemos la dieta y el primer día de la semana para crear el pdf
                 val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-                var dieta = sharedPref!!.getInt("dieta", 0)
+                val dieta = sharedPref!!.getInt("dieta", 0)
+                val savedPrimerDía = sharedPref.getInt("primerSemana", 0)
+
+
                 //Y entonces actualizamos la dieta de hoy
-                viewModel.generarDieta(baseGuardado, requireContext(), diasSemana, dieta)
+                viewModel.generarDieta(baseGuardado, requireContext(), diasSemana, dieta, savedPrimerDía)
 
                 viewModel.actualizarDieta.observe(viewLifecycleOwner) { compra ->
                     val calHoy = Calendar.getInstance()
@@ -242,9 +293,12 @@ class DietaFragment : Fragment() {
                     val baseGuardado = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
 
                     val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-                    var dieta = sharedPref!!.getInt("dieta", 0)
+                    val dieta = sharedPref!!.getInt("dieta", 0)
+                    val sharedDia = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+                    val savedPrimerDía = sharedDia.getInt("primerSemana", 0)
+
                     //Llamamos al método para obtener estas
-                    viewModel.generarDieta(baseGuardado, requireContext(), diasSemana, dieta)
+                    viewModel.generarDieta(baseGuardado, requireContext(), diasSemana, dieta, savedPrimerDía)
 
                     viewModel.actualizarDieta.observe(viewLifecycleOwner) { compra ->
                         val calHoy = Calendar.getInstance()
@@ -300,18 +354,38 @@ class DietaFragment : Fragment() {
                                 Context.MODE_PRIVATE,
                                 null
                             )
-                            viewModel.volverAGenerarPdf(requireContext(), diasSemana, basePdf)
+                            val sharedDia = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+                            val savedPrimerDía = sharedDia.getInt("primerSemana", 0)
+
+                            viewModel.volverAGenerarPdf(requireContext(), diasSemana, basePdf, savedPrimerDía)
                         }
                     }
                 }
+                cursorReceta.close()
+                cursor.close()
+                basePdf.close()
             }else {
                 Toast.makeText(requireContext(), getString(R.string.pdf_volver_generar), Toast.LENGTH_SHORT).show()
             }
         }
 
+        // Listener para el clic prolongado
+        binding.btPdf.setOnLongClickListener {
+            Toast.makeText(requireContext(), R.string.explica_botonPdf, Toast.LENGTH_SHORT).show()
+            true // Devuelve true para indicar que el evento fue manejado
+        }
+
+        //Este botón te lleva al menú de editar preferencias de la dieta
         binding.btEditarDieta.setOnClickListener{
             findNavController().navigate(R.id.nav_editar_generar_dieta)
         }
+
+        // Listener para el clic prolongado
+        binding.btEditarDieta.setOnLongClickListener {
+            Toast.makeText(requireContext(), R.string.explica_btEditarMenu, Toast.LENGTH_SHORT).show()
+            true // Devuelve true para indicar que el evento fue manejado
+        }
+
         return binding.root
     }
     /**
@@ -600,5 +674,107 @@ class DietaFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun primeraVez() {
+        val sharedPref = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        val primeraVez = sharedPref.getBoolean("primeraVez", true)
+        if (primeraVez) {
+                val dialogView = LinearLayout(requireActivity())
+                dialogView.orientation = LinearLayout.VERTICAL
+
+
+                // Creamos el CheckBox
+                val checkBox = CheckBox(requireContext())
+                checkBox.text = getString(R.string.dialog_inicial_acepto)
+                dialogView.addView(checkBox)
+
+                // Creamos el ImageButton para cambiar el idioma
+                val languageButton = ImageButton(requireContext())
+                languageButton.setImageResource(R.drawable.ic_language) // Aquí pones tu ícono
+                languageButton.setBackgroundColor(0) // Eliminar el fondo predeterminado del botón
+                languageButton.setContentDescription(getString(R.string.opcion_menu_idioma))
+                dialogView.addView(languageButton)
+
+                val dialog = AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.app_name)
+                    .setMessage(R.string.dialog_inicial_texto)
+                    .setView(dialogView)
+                    .setPositiveButton(
+                        R.string.ok,
+                        null
+                    ) // Se define como `null` para personalizar luego
+                    .create()
+            dialog.setCancelable(false)
+
+
+            dialog.setOnShowListener {
+                    val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    positiveButton.isEnabled = false // Desactiva el botón al inicio
+
+                    checkBox.setOnCheckedChangeListener { _, isChecked ->
+                        positiveButton.isEnabled = isChecked
+                    }
+
+                    positiveButton.setOnClickListener {
+                        // Acción al aceptar los términos
+                        val editor = sharedPref.edit()
+                        editor.putBoolean("primeraVez", false)
+                        editor.apply()
+
+                        dialog.dismiss()
+                    }
+
+                    languageButton.setOnClickListener {
+                        showLanguageChangeDialog(dialog, sharedPref)
+                    }
+                }
+
+                dialog.show()
+            }
+
+    }
+
+    // Función para cambiar el idioma
+    private fun setAppLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val resources: Resources = requireContext().resources
+        val config: Configuration = resources.configuration
+        config.setLocale(locale)
+
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+
+        // Retraso para asegurar que el dialog se cierre antes de reiniciar la actividad
+        Handler(Looper.getMainLooper()).postDelayed({
+            // Reiniciar la actividad para aplicar los cambios
+            requireActivity().recreate()
+        }, 300)  // El retraso de 300ms es suficiente para evitar el conflicto con el dialog
+
+    }
+
+    // Mostrar diálogo para cambiar el idioma
+    private fun showLanguageChangeDialog(dialog: AlertDialog, sharedPreferences: SharedPreferences) {
+        val languages = requireContext().resources.getStringArray(R.array.spinner_idiomas)
+        val builder = AlertDialog.Builder(requireContext())
+        val editor = sharedPreferences.edit()
+
+        builder.setTitle("Selecciona un idioma")
+            .setItems(languages) { _, which ->
+                when (which) {
+                    0 -> {setAppLocale("es")
+                        editor.putString("Language", "es")
+                    } // Cambiar a español
+                    1 -> {setAppLocale("en")
+                        editor.putString("Language", "en")
+                    } // Cambiar a inglés
+                }
+                editor.apply()
+                // Cerrar el diálogo después de seleccionar el idioma
+                dialog.dismiss()
+            }
+            .show()
     }
 }

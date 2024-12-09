@@ -75,8 +75,8 @@ class DetalleRecetaFragment : Fragment() {
 
         binding.btEliminar.setOnClickListener {
             val ostiaBorrar = AlertDialog.Builder(context)
-            ostiaBorrar.setTitle("¿Borrar?")
-            ostiaBorrar.setMessage("¿Estás seguro/a de borrar esta deliciosa receta de "+receta.nombre + "?")
+            ostiaBorrar.setTitle(R.string.aviso_borrar)
+            ostiaBorrar.setMessage(getString(R.string.aviso_texto_borrar) +receta.nombre + "?")
 
             ostiaBorrar.setPositiveButton(R.string.si) { dialog, which ->
                 val baseGuardado = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
@@ -98,6 +98,12 @@ class DetalleRecetaFragment : Fragment() {
             bundle.putInt("idReceta", id)
             //Y con esto pasamos a la siguiente pantalla
             findNavController().navigate(R.id.nav_editar_receta, bundle)
+        }
+
+        // Listener para el clic prolongado
+        binding.btEditar.setOnLongClickListener {
+            Toast.makeText(requireContext(), R.string.explica_btEditarReceta, Toast.LENGTH_SHORT).show()
+            true // Devuelve true para indicar que el evento fue manejado
         }
 
         binding.btCompartir.setOnClickListener {
@@ -125,6 +131,20 @@ class DetalleRecetaFragment : Fragment() {
             // Iniciar el Intent para mostrar las opciones de compartir
             startActivity(Intent.createChooser(intent,getString(R.string.compartir_con) ))
         }
+
+        // Listener para el clic prolongado
+        binding.btCompartir.setOnLongClickListener {
+            Toast.makeText(requireContext(), R.string.explica_btCompartir, Toast.LENGTH_SHORT).show()
+            true // Devuelve true para indicar que el evento fue manejado
+        }
+
+        // Mostrar una explicación detallada al pulsar el botón
+        binding.helpButton.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.agregar_calorias)
+                .setMessage(R.string.explicacion_calorias_texto)
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .show()        }
 
         return binding.root
     }

@@ -61,9 +61,13 @@
     <string name="copiar_compra">Copy shopping list</string>
     <string name="copiar_compra_exito">List copied to clipboard</string>
     <string name="cancelar">Operation has been canceled</string>
+    <string name="aviso_borrar">Delete?</string>
+    <string name="aviso_texto_borrar">Are you sure to delete this delicious recipe </string>
 
     <string name="compartir_con">Share with</string>
-
+    <string name="backup_exito">Backup created in: </string>
+    <string name="aviso_restaurar">Restore?</string>
+    <string name="aviso_texto_restaurar">Are you sure you want to restore the backup? This option will delete ALL existing data and cannot be undone</string>
 
     <!--> Generar dieta <-->
     <string name="aviso_acompanamiento">You need at least one accompaniment for your first dish</string>
@@ -77,12 +81,44 @@
     <string name="dieta_tipo">Diet type</string>
     <string name="dieta_fav">Favorite recipes for the next diet</string>
     <string name="dieta_actualizar_preferencias">Update preferences</string>
+    <string name="nombre_archivo">WeeklyMenu_</string>
+
 
     <!--> Opciones <-->
     <string name="opcion_menu_copia">Backup</string>
     <string name="opcion_menu_tema">Use dark theme</string>
     <string name="opcion_menu_idioma">Language</string>
+    <string name="backup_firebase">Firebase</string>
+    <string name="backup_google_drive">Google Drive</string>
+    <string name="backup_exito_titulo">Backup created successfully!</string>
+    <string name="opcion_primer_semana">First day of week</string>
+    <string name="crear_backup_gdrive">Create backup</string>
+    <string name="restaurar_backup_gdrive">Restore backup</string>
 
+    <!--> Botones de explicar cosas <-->
+    <string name="explica_botonPdf">Button to regenerate the current diet</string>
+    <string name="explica_btEditarMenu">Button to go to the diet preferences menu</string>
+    <string name="explica_btAgregar">Add a new recipe</string>
+    <string name="explica_btEditarReceta">Edit this recipe</string>
+    <string name="explica_btCompartir">Send this recipe to a friend!</string>
+    <string name="no_dieta">No diet created. Create your first diet now</string>
+    <string name="ayuda">Help</string>
+    <string name="explicacion_calorias_texto">This value is informational only. Not used when you make a diet</string>
+    <string name="dialog_inicial_acepto">I have read and understand the use of this app</string>
+    <string name="dialog_inicial_texto">DietApp Calendar DOES NOT replace a nutritionist. This app is designed for people who know and understand a minimum of how to diet. Please, if you do not know how to select foods for a correct diet, go to an expert.</string>
+
+    <!--> Recetas de prueba <-->
+    <string name="pollo_nombre">Roasted chicken with potatoes</string>
+    <string name="receta_descripcion">This is a recipe. You can use it, edit it, or delete it</string>
+    <string name="pescado_nombre">Fish with vegetables</string>
+    <string name="tortilla_nombre">Omelet with ham</string>
+    <string name="pure_nombre">Vegetable puree</string>
+    <string name="inicial_pollo">Chicken</string>
+    <string name="inicial_pescado">Fish</string>
+    <string name="inicial_patata">Potatoe</string>
+    <string name="inicial_huevo">Eggs</string>
+    <string name="inicial_verdura">Vegetables</string>
+    <string name="inicial_jamon">Ham</string>
 
 
     <!-->Categorías para buscar recetas</-->
@@ -119,4 +155,7 @@
         <item>Español</item>
         <item>English</item>
     </string-array>
+
+
+
 </resources>

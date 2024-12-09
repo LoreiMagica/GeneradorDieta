@@ -95,6 +95,8 @@ class EditarGenerarDietaViewModel() : ViewModel() {
                     data.add(receta)
                 }
             }
+            cursorReceta.close()
+            cursor.close()
         }
     }
 }

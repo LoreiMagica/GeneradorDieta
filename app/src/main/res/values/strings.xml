@@ -62,7 +62,15 @@
     <string name="copiar_compra_exito">Lista copiada al portapapeles</string>
     <string name="cancelar">Operación cancelada</string>
 
+    <string name="aviso_borrar">¿Borrar?</string>
+    <string name="aviso_texto_borrar">¿Estás seguro/a de borrar esta deliciosa receta de </string>
+
+
     <string name="compartir_con">Compartir con</string>
+    <string name="backup_exito">Copia de seguridad creada en: </string>
+    <string name="aviso_restaurar">¿Restaurar?</string>
+    <string name="aviso_texto_restaurar">¿Estás seguro/a de querer restaurar la copia de seguridad? Esta opción eliminará TODOS los datos existentes y no se puede deshacer</string>
+
 
 
     <!--> Generar dieta <-->
@@ -77,11 +85,44 @@
     <string name="dieta_tipo">Tipo de dieta</string>
     <string name="dieta_fav">Recetas favoritas para la siguiente dieta</string>
     <string name="dieta_actualizar_preferencias">Actualizar preferencias</string>
+    <string name="nombre_archivo">MenuSemanal_</string>
 
     <!--> Opciones <-->
     <string name="opcion_menu_copia">Copia de seguridad</string>
     <string name="opcion_menu_tema">Usar tema oscuro</string>
     <string name="opcion_menu_idioma">Idioma</string>
+    <string name="opcion_primer_semana">Primer día de la semana</string>
+    <string name="backup_firebase">Firebase</string>
+    <string name="backup_google_drive">Google Drive</string>
+    <string name="crear_backup_gdrive">Crear copia de seguridad</string>
+    <string name="restaurar_backup_gdrive">Restaurar copia de seguridad</string>
+    <string name="backup_exito_titulo">¡Copia de seguridad creada con éxito!</string>
+
+    <!--> Botones de explicar cosas <-->
+    <string name="explica_botonPdf">Botón para volver a generar la dieta actual</string>
+    <string name="explica_btEditarMenu">Botón para ir al menú de preferencias de dietas</string>
+    <string name="explica_btAgregar">Agrega una nueva receta</string>
+    <string name="explica_btEditarReceta">Edita esta receta</string>
+    <string name="explica_btCompartir">¡Envía esta receta a un amigo!</string>
+    <string name="no_dieta">Ninguna dieta creada. Crea tu primera dieta ahora</string>
+    <string name="ayuda">Ayuda</string>
+    <string name="explicacion_calorias_texto">Este valor es sólo informativo. No se utiliza al generar una dieta</string>
+    <string name="dialog_inicial_acepto">He leído y comprendo el uso de esta app</string>
+    <string name="dialog_inicial_texto">DietApp Calendario NO sustituye a un nutricionista. Esta app está diseñada para personas que conocen y comprenden un mínimo de cómo hacer una dieta. Por favor, si no sabe cómo seleccionar comidas para realizar una correcta dieta, acuda a un experto.</string>
+
+
+    <!--> Recetas de prueba <-->
+    <string name="pollo_nombre">Pollo con patatas</string>
+    <string name="pescado_nombre">Pescado con verduras</string>
+    <string name="tortilla_nombre">Tortilla con jamón</string>
+    <string name="pure_nombre">Puré de verduras</string>
+    <string name="receta_descripcion">Esta es una receta. Puedes usarla, editarla, o eliminarla</string>
+    <string name="inicial_pollo">Pollo</string>
+    <string name="inicial_pescado">Pescado</string>
+    <string name="inicial_patata">Patata</string>
+    <string name="inicial_huevo">Huevo</string>
+    <string name="inicial_verdura">Verdura</string>
+    <string name="inicial_jamon">Jamón</string>
 
 
 

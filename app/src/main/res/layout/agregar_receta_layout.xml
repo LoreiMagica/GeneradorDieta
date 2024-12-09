@@ -240,18 +240,35 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilCaloria"
-                    style="@style/textInputOuterField"
+                    style="@style/textInputCategoria"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
                     app:layout_constraintBottom_toTopOf="@+id/btAgregar"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/helpButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tilUrl">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etCaloria"
                         style="@style/textInputInnerField"
-                        android:inputType="number"
-                        android:hint="@string/agregar_calorias" />
+                        android:hint="@string/agregar_calorias"
+                        android:inputType="number" />
+
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageButton
+                    android:id="@+id/helpButton"
+                    android:layout_width="32dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/ayuda"
+                    android:src="@drawable/ic_ayuda"
+                    app:layout_constraintBottom_toBottomOf="@+id/tilCaloria"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tilCaloria"
+                    app:tint="#C4000000" />
 
 
 
