@@ -34,7 +34,7 @@
 
 
     <!-->Recetas</-->
-    <string name="receta_buscar">Buscar</string>
+    <string name="receta_buscar">Buscar por nombre...</string>
     <string name="agregar_nueva_receta">Agregar nueva receta</string>
     <string name="editar_receta">Editar receta</string>
     <string name="compartir_receta">Compartir receta</string>
@@ -50,7 +50,11 @@
     <string name="agregar_hora_comida">Hora de esta comida</string>
     <string name="eliminar_receta">Eliminar receta</string>
     <string name="avisoRepe">Ya has agregado </string>
-    <string name="avisoMinimo">La receta necesita al menos un nombre, categoría y hora</string>
+    <string name="avisoMinimo">La receta necesita al menos:\n
+    Un nombre\n
+    Una categoría\n
+    Si es comida completa, primer plato o acompañamiento\n
+    La hora a la que se come este plato</string>
     <string name="avisoExiste">Esta receta ya existe</string>
 
 
@@ -75,7 +79,11 @@
 
     <!--> Generar dieta <-->
     <string name="aviso_acompanamiento">Necesitas al menos un acompañamiento para tu primer plato</string>
-    <string name="aviso_mediodia">Necesitas al menos 7 comidas completas o combinadas del mediodía para el tipo de dieta que estás usando</string>
+    <string name="aviso_mediodia">Para crear una dieta con el tipo de dieta que estás usando, necesitas \n
+        7 comidas completas o 7 primeros platos junto a su acompañamiento para el mediodía\n
+        7 cenas completas o 7 primeros platos para la cena junto a su acompañamiento\n
+        1 desayuno\n
+        Puedes crearlas en el menú Recetas.</string>
     <string name="aviso_cena">Necesitas al menos 7 cenas completas o combinadas para el tipo de dieta que estás usando</string>
     <string name="aviso_desayuno">Necesitas al menos 1 desayuno</string>
     <string name="pdf_guardado">PDF guardado en:</string>
@@ -109,20 +117,76 @@
     <string name="explicacion_calorias_texto">Este valor es sólo informativo. No se utiliza al generar una dieta</string>
     <string name="dialog_inicial_acepto">He leído y comprendo el uso de esta app</string>
     <string name="dialog_inicial_texto">DietApp Calendario NO sustituye a un nutricionista. Esta app está diseñada para personas que conocen y comprenden un mínimo de cómo hacer una dieta. Por favor, si no sabe cómo seleccionar comidas para realizar una correcta dieta, acuda a un experto.</string>
+    <string name="dialog_inicial_titulo_dieta">¡Bienvenido/a!</string>
+    <string name="dialog_inicial_dieta">Te damos la bienvenida a DietApp Calendario. Para empezar a crear una dieta, necesitas: \n
+        7 comidas completas o 7 primeros platos junto a su acompañamiento para el mediodía\n
+        7 cenas completas o 7 primeros platos para la cena junto a su acompañamiento\n
+        1 desayuno\n
+        Puedes crearlas en el menú Recetas.</string>
+    <string name="dialog_inicial_receta">Este es el menú de recetas. Aquí podrás ver y crear tus propias recetas. Puedes empezar a crearlas con el botón de abajo a la derecha</string>
+    <string name="dialog_inicial_agregar_receta">Este es el menú para crear una receta. Una receta necesita al menos:\n
+    Un nombre\n
+    Una categoría\n
+    Si es comida completa, primer plato o acompañamiento\n
+    La hora a la que se come este plato\n
+    ¡Ya puedes empezar a crear tus deliciosas recetas!</string>
+
+
 
 
     <!--> Recetas de prueba <-->
     <string name="pollo_nombre">Pollo con patatas</string>
+    <string name="lomo_nombre">Lomo en salsa</string>
+    <string name="albondigas_nombre">Albóndigas con salsa</string>
     <string name="pescado_nombre">Pescado con verduras</string>
-    <string name="tortilla_nombre">Tortilla con jamón</string>
+    <string name="pescado_cebolla_nombre">Pescado en salsa cebolla</string>
+    <string name="macarrones_nombre">Macarrones con tomate</string>
+    <string name="lentejas_nombre">Lentejas con chorizo</string>
     <string name="pure_nombre">Puré de verduras</string>
+
+    <string name="tortilla_nombre">Tortilla con jamón</string>
+    <string name="hamburguesa_nombre">Hamburguesa con tomate</string>
+    <string name="salchichas_nombre">Salchichas frescas</string>
+    <string name="salpicon_nombre">Salpicón de marisco</string>
+    <string name="ensalada_pera_nombre">Ensalada de pera</string>
+    <string name="salteado_champinones_nombre">Salteado de champiñones</string>
+    <string name="ensalada_atun_nombre">Ensalada de atún</string>
+    <string name="acompana_lechuga">Lechuga</string>
+
+    <string name="tostadas_nombre">Tostadas con tomate rallado</string>
+
     <string name="receta_descripcion">Esta es una receta. Puedes usarla, editarla, o eliminarla</string>
     <string name="inicial_pollo">Pollo</string>
-    <string name="inicial_pescado">Pescado</string>
     <string name="inicial_patata">Patata</string>
+    <string name="inicial_lomo">Lomo</string>
+    <string name="inicial_albondiga">Albóndigas</string>
+    <string name="inicial_pescado">Pescado</string>
+    <string name="inicial_cebolla">Cebolla</string>
+    <string name="inicial_macarrones">Macarrones</string>
+    <string name="inicial_salsa">Tomate frito</string>
+    <string name="inicial_lentejas">Lentejas</string>
+    <string name="inicial_chorizo">Chorizo</string>
+
     <string name="inicial_huevo">Huevo</string>
-    <string name="inicial_verdura">Verdura</string>
     <string name="inicial_jamon">Jamón</string>
+    <string name="inicial_verdura">Verdura</string>
+    <string name="inicial_hamburguesa">Hamburguesa</string>
+    <string name="inicial_tomate">Tomate</string>
+    <string name="inicial_pera">Pera</string>
+    <string name="inicial_salchichas">Salchichas</string>
+    <string name="inicial_salteado_champinon">Champiñones</string>
+    <string name="inicial_atun">Atún</string>
+    <string name="inicial_pan">Pan</string>
+    <string name="inicial_marisco">Marisco</string>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -160,5 +224,6 @@
         <item>Español</item>
         <item>English</item>
     </string-array>
+    <string name="pavo_vuelta_nombre">Filete de pavo</string>
 
 </resources>

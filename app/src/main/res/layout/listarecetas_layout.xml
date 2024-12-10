@@ -32,7 +32,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etReceta"
                     style="@style/textInputInnerField"
-                    android:hint="@string/agregar_nombre"
+                    android:hint="@string/receta_buscar"
                     android:text="" />
             </com.google.android.material.textfield.TextInputLayout>
 

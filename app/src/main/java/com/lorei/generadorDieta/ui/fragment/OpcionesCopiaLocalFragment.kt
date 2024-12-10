@@ -11,7 +11,9 @@ import android.net.Uri
 import android.os.Build
 
 import android.os.Bundle
+import android.os.Environment
 import android.provider.DocumentsContract
+import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
@@ -182,7 +184,7 @@ class OpcionesCopiaLocalFragment : Fragment() {
         }
     }
 
-    private fun backupDatabase() {
+  /*  private fun backupDatabase() {
         try {
             // Ruta de la base de datos original
             val dbPath = requireActivity().getDatabasePath("baseGuardado.db").absolutePath
@@ -215,6 +217,8 @@ class OpcionesCopiaLocalFragment : Fragment() {
         }
     }
 
+   */
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_RESTORE && resultCode == Activity.RESULT_OK) {
@@ -223,6 +227,71 @@ class OpcionesCopiaLocalFragment : Fragment() {
             }
         }
     }
+
+
+    private fun backupDatabase() {
+        try {
+            // Ruta de la base de datos original
+            val dbPath = requireActivity().getDatabasePath("baseGuardado.db").absolutePath
+
+            // Obtener la fecha actual para el nombre del archivo
+            val sdf = SimpleDateFormat("dd-MM-yyyy_HH.mm.ss", Locale.getDefault())
+            val currentDate = sdf.format(Date())
+            val backupFileName = "backup_DietApp_Calendario_$currentDate.db"
+            var realpath = ""
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // Usar MediaStore para guardar en Documentos accesibles para el usuario
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, backupFileName)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "application/octet-stream")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, "Documents/DietApp_Calendario")
+                }
+
+                val contentResolver = requireContext().contentResolver
+                val uri = requireActivity().contentResolver.insert(
+                    MediaStore.Files.getContentUri("external"),
+                    contentValues
+                )
+                uri?.let {
+                    contentResolver.openOutputStream(it).use { outputStream ->
+                        File(dbPath).inputStream().copyTo(outputStream!!)
+                    }
+                    requireContext().contentResolver.query(it, arrayOf(MediaStore.Images.Media.DATA), null, null, null)?.use { cursor ->
+                        val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                        if (cursor.moveToFirst()) {
+                            realpath = cursor.getString(columnIndex)
+                        }
+                    }
+                }
+            } else {
+                // Para versiones anteriores a Android Q
+                val backupDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "DietApp_Calendario")
+                if (!backupDir.exists()) {
+                    backupDir.mkdirs()
+                }
+                val backupFile = File(backupDir, backupFileName)
+                realpath = "$backupDir/$backupFileName"
+
+                // Copiar la base de datos al archivo de copia de seguridad
+                File(dbPath).copyTo(backupFile, overwrite = true)
+            }
+
+            // Notificar al usuario con un AlertDialog
+            val alertBackup = AlertDialog.Builder(context)
+            alertBackup.setTitle(requireContext().getString(R.string.backup_exito_titulo))
+            alertBackup.setMessage("${getString(R.string.backup_exito)} $realpath")
+
+            alertBackup.setPositiveButton(R.string.ok) { dialog, _ -> }
+
+            alertBackup.show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), "Error al crear la copia de seguridad", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
     private fun restoreDatabase(uri: Uri) {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)

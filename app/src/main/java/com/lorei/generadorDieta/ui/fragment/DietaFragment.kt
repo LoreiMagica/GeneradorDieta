@@ -29,10 +29,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import com.lorei.generadorDieta.R
 import com.lorei.generadorDieta.databinding.DietaLayoutBinding
 import com.lorei.generadorDieta.model.Receta
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.*
 
 
@@ -50,6 +53,7 @@ class DietaFragment : Fragment() {
         binding = DietaLayoutBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[DietaViewModel::class.java]
 
+        //Comprobamos si es la primera vez que el usuario entra en la app para monstrar el mensaje de bienvenida y demás
         primeraVez()
 
         val basePdf = requireActivity().openOrCreateDatabase(
@@ -671,11 +675,19 @@ class DietaFragment : Fragment() {
                             }
                         }
                 }
+                //y escondemos los views iniciales
+                binding.noDietaFondo.visibility = View.GONE
+                binding.noDieta.visibility = View.GONE
             }
 
         }
+        //Cerramos el cursor
+        cursor.close()
     }
 
+    /**
+    * Método para mostrar el mensaje de biencvenida al usuario con los términos de la app
+     **/
     private fun primeraVez() {
         val sharedPref = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
         val primeraVez = sharedPref.getBoolean("primeraVez", true)
@@ -717,22 +729,23 @@ class DietaFragment : Fragment() {
                     }
 
                     positiveButton.setOnClickListener {
-                        // Acción al aceptar los términos
+                        // Acción al aceptar los términos. Guardamos el valor para no volver a mostrar el mensaje
                         val editor = sharedPref.edit()
                         editor.putBoolean("primeraVez", false)
                         editor.apply()
+                        //Y como es la primera vez, rellenamos la base de datos con recetas de prueba
+                        generarRecetasIniciales()
 
                         dialog.dismiss()
                     }
 
+                //Acción para cambiar el idioma
                     languageButton.setOnClickListener {
                         showLanguageChangeDialog(dialog, sharedPref)
                     }
                 }
-
                 dialog.show()
             }
-
     }
 
     // Función para cambiar el idioma
@@ -771,10 +784,95 @@ class DietaFragment : Fragment() {
                         editor.putString("Language", "en")
                     } // Cambiar a inglés
                 }
+                //Sea lo que sea que elija, lo guardamos en memoria
                 editor.apply()
                 // Cerrar el diálogo después de seleccionar el idioma
                 dialog.dismiss()
             }
             .show()
     }
+
+    /**
+     * Método para rellenar en la base de datos recetas iniciales
+     */
+    private fun generarRecetasIniciales() {
+        //Abrimos la base de datos
+        val baseGuardado = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
+
+        //Creamos la tabla en caso de no existir
+        baseGuardado.execSQL("CREATE TABLE if not exists recetas (numero integer primary key AUTOINCREMENT, nombre VARCHAR(200), categorias VARCHAR(200), horasComida VARCHAR(200), preparacion VARCHAR(500), ingredientes VARCHAR(200), calorias tinyint, url VARCHAR(200))")
+
+
+        //Rellenamos los arrays con valores
+        val arrayNombre = mutableListOf<String>(getString(R.string.pollo_nombre),
+            getString(R.string.lomo_nombre), getString(R.string.albondigas_nombre),
+            getString(R.string.pescado_nombre),getString(R.string.pescado_cebolla_nombre),
+            getString(R.string.macarrones_nombre),getString(R.string.lentejas_nombre),
+            getString(R.string.pure_nombre),getString(R.string.acompana_lechuga),
+            getString(R.string.ensalada_pera_nombre),getString(R.string.ensalada_atun_nombre),
+            getString(R.string.tortilla_nombre),getString(R.string.hamburguesa_nombre),
+            getString(R.string.salteado_champinones_nombre),getString(R.string.salchichas_nombre),
+            getString(R.string.salpicon_nombre),getString(R.string.tostadas_nombre))
+
+        val arrayCat = mutableListOf<Array<Int>>(arrayOf(1, 6), arrayOf(1), arrayOf(1),
+            arrayOf(2, 6),arrayOf(2,6), arrayOf(4, 6),arrayOf(3), arrayOf(6),arrayOf(6),
+            arrayOf(6, 7),arrayOf(2,6), arrayOf(1, 5),arrayOf(1, 6), arrayOf(1, 6),arrayOf(1),
+            arrayOf(2, 6),arrayOf(4,6))
+
+        val arrayHora = mutableListOf<Array<Int>>(arrayOf(9,12), arrayOf(10,12), arrayOf(10,12),
+            arrayOf(9,12),arrayOf(9, 12), arrayOf(9,12),arrayOf(9,12), arrayOf(11,12),arrayOf(11, 16),
+            arrayOf(9,16),arrayOf(9,16), arrayOf(10,16),arrayOf(9,16), arrayOf(9,16),arrayOf(10,16),
+            arrayOf(9,16),arrayOf(13))
+        val arrayIng = mutableListOf<Array<String>>(arrayOf(getString(R.string.inicial_pollo), getString(R.string.inicial_patata)),
+            arrayOf(getString(R.string.lomo_nombre)), arrayOf(getString(R.string.inicial_albondiga)),
+            arrayOf(getString(R.string.inicial_pescado), getString(R.string.inicial_verdura)),
+            arrayOf(getString(R.string.inicial_pescado),getString(R.string.inicial_cebolla)),
+            arrayOf(getString(R.string.inicial_macarrones),getString(R.string.inicial_salsa)),
+            arrayOf(getString(R.string.inicial_lentejas), getString(R.string.inicial_chorizo)),
+            arrayOf(getString(R.string.inicial_verdura)),arrayOf(getString(R.string.acompana_lechuga)),
+            arrayOf(getString(R.string.acompana_lechuga), getString(R.string.inicial_tomate),
+                getString(R.string.inicial_pera)),arrayOf(getString(R.string.acompana_lechuga),
+                getString(R.string.inicial_tomate), getString(R.string.inicial_atun)),
+            arrayOf(getString(R.string.inicial_huevo), getString(R.string.inicial_jamon)),
+            arrayOf(getString(R.string.hamburguesa_nombre), getString(R.string.inicial_cebolla)),
+            arrayOf(getString(R.string.inicial_salteado_champinon), getString(R.string.inicial_jamon)),arrayOf(getString(R.string.inicial_salchichas)),
+            arrayOf(getString(R.string.inicial_marisco), getString(R.string.inicial_cebolla)),arrayOf(getString(R.string.inicial_pan),getString(R.string.inicial_tomate)))
+
+        //Con un for, rellenamos de manera eficiente la base de datos
+        for (i in 0 until arrayNombre.size) {
+            //CDreamos la variable donde almacenaremos la receta a agregar
+            val registro = ContentValues()
+
+            val json1 = JSONObject()
+            json1.put("listaCategorias", JSONArray(arrayCat[i]))
+            val jsonCategorias: String = json1.toString()
+
+            //Y lo mismo con los ingredientes
+            val json2 = JSONObject()
+            json2.put("listaIngredientes", JSONArray(arrayIng[i]))
+            val jsonIngredientes: String = json2.toString()
+
+            val json3 = JSONObject()
+            json3.put("listaHoras", JSONArray(arrayHora[i]))
+            val jsonHoras: String = json3.toString()
+
+            registro.put("nombre", arrayNombre[i])
+            registro.put("categorias", jsonCategorias)
+            registro.put("horasComida", jsonHoras)
+            registro.put("preparacion", getString(R.string.receta_descripcion))
+            registro.put("ingredientes", jsonIngredientes)
+            registro.put("calorias", 0)
+            registro.put("url", "www.youube.com")
+            baseGuardado.insert("recetas", null, registro)
+        }
+        //Ya que estamos, mostramos el mensaje de bienvenida al usuario
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.dialog_inicial_titulo_dieta)
+            .setMessage(R.string.dialog_inicial_dieta)
+            .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+            .show()
+        //Cerramos la base de datos por si acaso
+    baseGuardado.close()
+    }
+
 }

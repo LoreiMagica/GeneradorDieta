@@ -39,6 +39,21 @@ class EditarRecetaFragment : Fragment() {
         binding = AgregarRecetaLayoutBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[EditarRecetaViewModel::class.java]
 
+        // Comprobamos si es la primera vez que el usuario entra a esta ventana para ofrecerle un tutorial
+        val sharedPref = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        val inicialAgregar = sharedPref.getBoolean("inicialAgregar", false)
+
+        if(!inicialAgregar){
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.title_editar_receta)
+                .setMessage(R.string.dialog_inicial_agregar_receta)
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .show()
+            val editor = sharedPref.edit()
+            editor.putBoolean("inicialAgregar", true)
+            editor.apply()
+        }
+
         //Abrimos la base de datos
         val baseGuardado = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
 
@@ -109,7 +124,20 @@ class EditarRecetaFragment : Fragment() {
                 chip.isChecked = true
             }
 
+            // Agregar el chip a la vista
             binding.horaComida.addView(chip)
+
+            // Lógica de deselección exclusiva para los chips 9, 10 y 11
+            if (chip.id in listOf(9, 10, 11)) {
+                chip.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        listOf(9, 10, 11).filter { it != chip.id }.forEach { otherId ->
+                            val otherChip = binding.horaComida.findViewById<Chip>(otherId)
+                            otherChip.isChecked = false
+                        }
+                    }
+                }
+            }
         }
 
         horasElegidas = receta.horas as MutableList<Int>
@@ -159,28 +187,8 @@ class EditarRecetaFragment : Fragment() {
         //Se carga la lista de categorías de comidas
         val categorias = resources.getStringArray(R.array.receta_categoria)
 
-        //Se carga un modelo de lista, y la lista de categorías previamente cargada, en el input text de categorías
-        val adapter = ArrayAdapter<String>(requireActivity(), android.R.layout.simple_dropdown_item_1line, categorias)
-       /* binding.etCategoria.setAdapter(adapter)
 
-        //función para agregar una categoría de la lista
-        binding.etCategoria.setOnItemClickListener { _, _, position, _ ->
-            val selectedItem = adapter.getItem(position)
-            if (selectedItem != null) {
-                // Agregar el chip solo si no existe ya
-                if (!isChipAlreadyAdded(selectedItem, binding.listaCategorias)) {
-                    addChipToGroup(selectedItem, binding.listaCategorias)
-                } else {
 
-                    //En caso de ya existir, se avisa al usuario
-                    Toast.makeText(activity, (getString(R.string.avisoRepe) + " " + selectedItem), Toast.LENGTH_SHORT)
-                        .show()
-                }
-                binding.etCategoria.text.clear() // Limpiar el campo de entrada
-            }
-    }
-
-        */
 
         //Hacemos lo mismo con los ingredientes. Al pulsar el botón, comprueba si existe y lo agrega o no
         binding.botonAgregarIngrediente.setOnClickListener {
@@ -206,9 +214,15 @@ class EditarRecetaFragment : Fragment() {
 
         //Damos función al botón de agregar receta
         binding.btAgregar.setOnClickListener {
+            val chipsHorasObligatorias = listOf(9, 10, 11)
+            val chipsHorasSecundarias = listOf(12, 13, 14, 15, 16, 17)
 
-            //Comprobamos que al menos haya un nombre y categoría para no crear una receta vacía
-            if(binding.etName.text!!.isNotEmpty() && categoriasElegidas.size > 0 && horasElegidas.size > 0){
+            // Validar que al menos uno de los chips 9, 10 u 11 está seleccionado
+            val seleccionoHoraObligatoria = horasElegidas.any { it in chipsHorasObligatorias }
+            // Validar que al menos uno de los chips 12, 13, 14, 15, 16 o 17 está seleccionado
+            val seleccionoHoraSecundaria = horasElegidas.any { it in chipsHorasSecundarias }
+            //Comprobamos que al menos haya un nombre y categoría para no crear una receta vacía, y que se ha elegido un mínimo de horas
+            if(binding.etName.text!!.isNotEmpty() && binding.listaCategorias.childCount > 0 && seleccionoHoraObligatoria && seleccionoHoraSecundaria){
                 val bd = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
                 val cursor: Cursor = bd.rawQuery("Select name from sqlite_master where type = 'table' and name like 'recetas' ", null)
                 var existe = false
@@ -240,8 +254,10 @@ class EditarRecetaFragment : Fragment() {
                 }
 
             } else {
-                //En caso contrario, se avisa al usuario
-                Toast.makeText(activity, R.string.avisoMinimo, Toast.LENGTH_SHORT)
+                AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.title_agregar_recetas)
+                    .setMessage(R.string.avisoMinimo)
+                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
                     .show()
             }
             }

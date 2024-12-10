@@ -1,6 +1,7 @@
 package com.lorei.generadorDieta.ui.fragment
 
 import ListaRecetasViewModel
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,7 +33,20 @@ class ListaRecetasFragment : Fragment() {
         viewModel = ViewModelProvider(this)[ListaRecetasViewModel::class.java]
         viewModel.cargarAdapter(requireContext())
 
+        // Comprobamos si es la primera vez que el usuario entra a esta ventana para ofrecerle un tutorial
+        val sharedPref = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        val inicialAgregar = sharedPref.getBoolean("inicialReceta", false)
 
+        if(!inicialAgregar){
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.title_agregar_recetas)
+                .setMessage(R.string.dialog_inicial_receta)
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .show()
+            val editor = sharedPref.edit()
+            editor.putBoolean("inicialReceta", true)
+            editor.apply()
+        }
         //Cargamos la base de datos para obtener las recetas
         val baseGuardado = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
 

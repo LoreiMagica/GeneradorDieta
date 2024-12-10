@@ -109,7 +109,6 @@ class OpcionesMenuFragment : Fragment() {
                 if (position != savedPrimerDía) {
                     val editor = sharedPref.edit()
                     editor.putInt("primerSemana", position)
-                    Log.d("sem", position.toString())
                     editor.apply()
                     savedPrimerDía = position
                 }

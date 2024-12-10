@@ -34,7 +34,7 @@
 
 
     <!-->Recetas</-->
-    <string name="receta_buscar">Search</string>
+    <string name="receta_buscar">Search by name...</string>
     <string name="agregar_nueva_receta">Add new recipe</string>
     <string name="editar_receta">Edit recipe</string>
     <string name="compartir_receta">Share recipe</string>
@@ -50,7 +50,11 @@
     <string name="agregar_hora_comida">Time for this meal</string>
     <string name="eliminar_receta">Delete recipe</string>
     <string name="avisoRepe">You have already added </string>
-    <string name="avisoMinimo">The recipe needs at least one name, category and time</string>
+    <string name="avisoMinimo">The recipe requires at least:\n
+    A name\n
+    A category\n
+    If it is a complete meal, first course or accompaniment\n
+    The time at which this dish is eaten</string>
     <string name="avisoExiste">This recipe already exists</string>
 
 
@@ -71,13 +75,17 @@
 
     <!--> Generar dieta <-->
     <string name="aviso_acompanamiento">You need at least one accompaniment for your first dish</string>
-    <string name="aviso_mediodia">You need at least 7 full or combined lunchs for the type of diet you are using</string>
+    <string name="aviso_mediodia">To create a diet for the type of diet you are using, you need \n
+        7 complete meals or 7 first dishes with their accompaniment for midday\n
+        7 complete dinners or 7 first dishes for dinner along with their accompaniment\n
+        1 breakfast\n
+        You can create them in the Recipes menu.</string>
     <string name="aviso_cena">You need at least 7 full or combined dinners for the type of diet you are using</string>
     <string name="aviso_desayuno">You need at least 1 breakfast</string>
     <string name="pdf_guardado">PDF saved in:</string>
     <string name="pdf_error">Error saving PDF</string>
     <string name="pdf_titulo">Recipe created successfully!</string>
-    <string name="pdf_volver_generar">There is no diet currently maked</string>
+    <string name="pdf_volver_generar">There is no diet currently made</string>
     <string name="dieta_tipo">Diet type</string>
     <string name="dieta_fav">Favorite recipes for the next diet</string>
     <string name="dieta_actualizar_preferencias">Update preferences</string>
@@ -106,19 +114,61 @@
     <string name="explicacion_calorias_texto">This value is informational only. Not used when you make a diet</string>
     <string name="dialog_inicial_acepto">I have read and understand the use of this app</string>
     <string name="dialog_inicial_texto">DietApp Calendar DOES NOT replace a nutritionist. This app is designed for people who know and understand a minimum of how to diet. Please, if you do not know how to select foods for a correct diet, go to an expert.</string>
-
+    <string name="dialog_inicial_titulo_dieta">Welcome!</string>
+    <string name="dialog_inicial_dieta">Welcome to DietApp Calendar. To start creating a diet, you need:\n
+        7 complete meals or 7 first dishes along with their accompaniment for midday\n
+        7 complete dinners or 7 first dishes for dinner along with their accompaniment\n
+        1 breakfast\n
+        You can create them in the Recipes menu.</string>
+    <string name="dialog_inicial_receta">This is the recipe menu. Here you can see and create your own recipes. You can start creating them with the button below on the right</string>
+    <string name="dialog_inicial_agregar_receta">This is the menu to create a recipe. A recipe needs at least:\n
+        A name\n
+        A category\n
+        If it is a complete meal, first dish or accompaniment\n
+        The time at which this dish is eaten\n
+        You can now start creating your delicious recipes!</string>
     <!--> Recetas de prueba <-->
     <string name="pollo_nombre">Roasted chicken with potatoes</string>
+    <string name="hamburguesa_nombre">Hamburger with tomato</string>
+    <string name="salchichas_nombre">fresh sausages</string>
+    <string name="salpicon_nombre">Seafood salpico</string>
+    <string name="ensalada_pera_nombre">pear salad</string>
+    <string name="pavo_vuelta_nombre">turkey fillet</string>
+    <string name="salteado_champinones_nombre">Mushroom sauté</string>
+    <string name="ensalada_atun_nombre">tuna salad</string>
+    <string name="tostadas_nombre">Toasts with grated tomato</string>
     <string name="receta_descripcion">This is a recipe. You can use it, edit it, or delete it</string>
+    <string name="lomo_nombre">Loin with sauce</string>
+    <string name="albondigas_nombre">Meatballs with sauce</string>
     <string name="pescado_nombre">Fish with vegetables</string>
     <string name="tortilla_nombre">Omelet with ham</string>
+    <string name="pescado_cebolla_nombre">Fish with onion sauce</string>
+    <string name="macarrones_nombre">Macaroni with tomato</string>
+    <string name="lentejas_nombre">Lentils with chorizo</string>
     <string name="pure_nombre">Vegetable puree</string>
     <string name="inicial_pollo">Chicken</string>
+    <string name="inicial_lomo">Loin</string>
+    <string name="inicial_albondiga">meatballs</string>
     <string name="inicial_pescado">Fish</string>
-    <string name="inicial_patata">Potatoe</string>
+    <string name="inicial_patata">Potatoes</string>
+    <string name="inicial_cebolla">Onion</string>
+    <string name="inicial_macarrones">Macaroni</string>
+    <string name="inicial_salsa">fried tomato</string>
+    <string name="inicial_lentejas">Lentils</string>
+    <string name="inicial_chorizo">Sausage</string>
     <string name="inicial_huevo">Eggs</string>
     <string name="inicial_verdura">Vegetables</string>
     <string name="inicial_jamon">Ham</string>
+    <string name="inicial_salchichas">Sausages</string>
+    <string name="inicial_marisco">Seafood</string>
+    <string name="inicial_hamburguesa">Hamburguer</string>
+    <string name="inicial_tomate">Tomato</string>
+    <string name="inicial_pera">Pear</string>
+    <string name="acompana_lechuga">Lettuce</string>
+    <string name="inicial_salteado_champinon">Mushrooms</string>
+    <string name="inicial_pan">Bread</string>
+    <string name="inicial_atun">Tuna</string>
+
 
 
     <!-->Categorías para buscar recetas</-->
@@ -155,7 +205,5 @@
         <item>Español</item>
         <item>English</item>
     </string-array>
-
-
 
 </resources>

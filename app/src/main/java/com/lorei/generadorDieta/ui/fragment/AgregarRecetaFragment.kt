@@ -40,6 +40,20 @@ class AgregarRecetaFragment : Fragment() {
         binding = AgregarRecetaLayoutBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this)[ListaRecetasViewModel::class.java]
 
+        // Comprobamos si es la primera vez que el usuario entra a esta ventana para ofrecerle un tutorial
+        val sharedPref = requireActivity().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+        val inicialAgregar = sharedPref.getBoolean("inicialAgregar", false)
+
+        if(!inicialAgregar){
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.title_agregar_recetas)
+                .setMessage(R.string.dialog_inicial_agregar_receta)
+                .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                .show()
+            val editor = sharedPref.edit()
+            editor.putBoolean("inicialAgregar", true)
+            editor.apply()
+        }
 
 
         //Hacemos lo mismo con los ingredientes. Al pulsar el botón, comprueba si existe y lo agrega o no
@@ -113,14 +127,27 @@ class AgregarRecetaFragment : Fragment() {
         chipIdsCat.add(8)
 
 
-        //Le damos función al clickar los chips
+        //Le damos función al clickar los chips de horas
         chipListHora.forEachIndexed { index, s ->
             val chip = Chip(requireContext())
             chip.text = s
             chip.id = chipIdsHora[index]
             chip.isCheckable = true
 
+            // Agregar el chip a la vista
             binding.horaComida.addView(chip)
+
+            // Lógica de deselección exclusiva para los chips 9, 10 y 11
+            if (chip.id in listOf(9, 10, 11)) {
+                chip.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        listOf(9, 10, 11).filter { it != chip.id }.forEach { otherId ->
+                            val otherChip = binding.horaComida.findViewById<Chip>(otherId)
+                            otherChip.isChecked = false
+                        }
+                    }
+                }
+            }
         }
         //Le damos función al clickar los chips a las categorías
         chipListCat.forEachIndexed { index, s ->
@@ -150,8 +177,15 @@ class AgregarRecetaFragment : Fragment() {
 
         //Damos función al botón de agregar receta
         binding.btAgregar.setOnClickListener {
+            val chipsHorasObligatorias = listOf(9, 10, 11)
+            val chipsHorasSecundarias = listOf(12, 13, 14, 15, 16, 17)
+
+            // Validar que al menos uno de los chips 9, 10 u 11 está seleccionado
+            val seleccionoHoraObligatoria = horasElegidas.any { it in chipsHorasObligatorias }
+            // Validar que al menos uno de los chips 12, 13, 14, 15, 16 o 17 está seleccionado
+            val seleccionoHoraSecundaria = horasElegidas.any { it in chipsHorasSecundarias }
             //Comprobamos que al menos haya un nombre y categoría para no crear una receta vacía
-            if(binding.etName.text!!.isNotEmpty() && binding.listaCategorias.childCount > 0 && horasElegidas.size > 0){
+            if(binding.etName.text!!.isNotEmpty() && binding.listaCategorias.childCount > 0 && seleccionoHoraObligatoria && seleccionoHoraSecundaria){
                 val bd = requireActivity().openOrCreateDatabase("baseGuardado.db", Context.MODE_PRIVATE, null)
                 val cursor: Cursor = bd.rawQuery("Select name from sqlite_master where type = 'table' and name like 'recetas' ", null)
                 var existe = false
@@ -185,7 +219,10 @@ class AgregarRecetaFragment : Fragment() {
 
             } else {
                 //En caso contrario, se avisa al usuario
-                Toast.makeText(activity, R.string.avisoMinimo, Toast.LENGTH_SHORT)
+                AlertDialog.Builder(requireContext())
+                    .setTitle(R.string.title_agregar_recetas)
+                    .setMessage(R.string.avisoMinimo)
+                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
                     .show()
             }
             }

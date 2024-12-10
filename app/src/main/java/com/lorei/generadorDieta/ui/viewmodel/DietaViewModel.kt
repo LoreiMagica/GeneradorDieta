@@ -12,6 +12,7 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
 import android.util.TypedValue
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -70,7 +71,7 @@ class DietaViewModel : ViewModel() {
     fun generarDieta(baseGuardado: SQLiteDatabase, context: Context, diasSemana: List<String>, dieta : Int, savedPrimerDia : Int) {
         arrayNombres = context.resources.getStringArray(R.array.receta_categoria)
         //Cargamos los datos de recetas en sus arrays
-        val todoCorrecto = cargarRecetas(baseGuardado, dieta)
+        val todoCorrecto = cargarRecetas(baseGuardado, dieta, context)
         if (todoCorrecto) {
             var carne = 0
             var pescado = 0
@@ -623,7 +624,7 @@ class DietaViewModel : ViewModel() {
 
 
     //Función para buscar recetas en la base de datos y mostrarlas
-    fun cargarRecetas(baseGuardado: SQLiteDatabase, dieta : Int): Boolean {
+    fun cargarRecetas(baseGuardado: SQLiteDatabase, dieta : Int, context: Context): Boolean {
 
         //Lipiamos todos los registros para evitar duplicados
         dataPrimerPlato.clear()
@@ -805,11 +806,19 @@ class DietaViewModel : ViewModel() {
                         false
                     }
                 } else {
-                    _mostrarToast.value = R.string.aviso_mediodia
+                    AlertDialog.Builder(context)
+                        .setTitle(R.string.generar_dieta)
+                        .setMessage(R.string.aviso_mediodia)
+                        .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                        .show()
                     return false
                 }
             } else {
-                _mostrarToast.value = R.string.aviso_acompanamiento
+                AlertDialog.Builder(context)
+                    .setTitle(R.string.generar_dieta)
+                    .setMessage(R.string.aviso_cena)
+                    .setPositiveButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+                    .show()
                 return false
             }
         } else {
