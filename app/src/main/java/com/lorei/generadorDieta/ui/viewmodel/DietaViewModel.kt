@@ -8,11 +8,8 @@ import android.graphics.drawable.Drawable
 import android.graphics.pdf.PdfDocument
 import android.os.Build
 import android.os.Environment
-import android.os.Handler
 import android.provider.MediaStore
 import android.util.Log
-import android.util.TypedValue
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -527,11 +524,18 @@ class DietaViewModel : ViewModel() {
                     if (semanaMerienda[dia].nombre == "") {
                         when (dieta) {
                             0 -> {
-                                semanaMerienda[dia] = dataMerienda.randomOrNull()!!
+                                val resultados = dataMerienda.filter { receta ->
+                                    semanaMerienda[dia-1].id != receta.id
+                                }
+                                if (resultados.size > 0) {
+                                    semanaMerienda[dia] = resultados.randomOrNull()!!
+                                } else {
+                                    semanaMerienda[dia] = dataMerienda.randomOrNull()!!
+                                }
                             }
                             1 -> {
                                 val resultados = dataMerienda.filter { receta ->
-                                    ((receta.categoria as? List<Int>)?.contains(1) == false) && ((receta.categoria as? List<Int>)?.contains(2) == false)
+                                    ((receta.categoria as? List<Int>)?.contains(1) == false) && ((receta.categoria as? List<Int>)?.contains(2) == false) && semanaMerienda[dia-1].id != receta.id
                                 }
                                 if (resultados.size > 0) {
                                     semanaMerienda[dia] = resultados.randomOrNull()!!
@@ -545,6 +549,7 @@ class DietaViewModel : ViewModel() {
                                             ((receta.categoria as? List<Int>)?.contains(2) == false)
                                             && ((receta.categoria as? List<Int>)?.contains(6) == false)
                                             && ((receta.categoria as? List<Int>)?.contains(8) == false)
+                                            && semanaMerienda[dia-1].id != receta.id
                                 }
                                 if (resultados.size > 0) {
                                     semanaMerienda[dia] = resultados.randomOrNull()!!
@@ -555,7 +560,7 @@ class DietaViewModel : ViewModel() {
                         }
                     }
                 }
-                var cenaOcupada = setOf(
+                val cenaOcupada = setOf(
                     semanaCena[1].id!!.toInt(),
                     semanaCena[2].id!!.toInt(),
                     semanaCena[3].id!!.toInt(),
@@ -1041,7 +1046,6 @@ class DietaViewModel : ViewModel() {
      */
     fun crearMenuPdf(context: Context, semana: List<String>, baseGuardado: SQLiteDatabase, savedPrimerDia: Int) {
 
-        Log.d("dia", savedPrimerDia.toString())
         val diasSemana = if (savedPrimerDia == 1) {
             // Obtener el último elemento
             val lastElement = semana.last()
@@ -1286,7 +1290,7 @@ class DietaViewModel : ViewModel() {
         //Obtenemos el día y la hora para evitar duplicados en el nombre
         val sdf = SimpleDateFormat("dd-M-yyyy hh.mm.ss")
         val currentDate = sdf.format(Date())
-        val fileName = "${R.string.nombre_archivo}$currentDate.pdf"
+        val fileName = "${context.getString(R.string.nombre_archivo)}$currentDate.pdf"
 
         //En función de la versión de android, lo imprimimos de una manera u otra
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1541,7 +1545,7 @@ class DietaViewModel : ViewModel() {
         // Guarda el PDF en almacenamiento externo
         val directory =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-        val file = File(directory, "${R.string.nombre_archivo}$currentDate.pdf")
+        val file = File(directory, "${context.getString(R.string.nombre_archivo)}$currentDate.pdf")
         pdfDocument.writeTo(FileOutputStream(file))
         pdfDocument.close()
     }

@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.lorei.generadorDieta.R
 import com.lorei.generadorDieta.databinding.ListarecetasLayoutBinding
 import com.lorei.generadorDieta.ui.adapter.ListaRecetasAdapter
-import java.util.*
 
 
 class ListaRecetasFragment : Fragment() {

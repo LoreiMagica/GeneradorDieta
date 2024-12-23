@@ -11,6 +11,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -20,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -29,7 +29,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import com.lorei.generadorDieta.R
 import com.lorei.generadorDieta.databinding.DietaLayoutBinding
@@ -558,6 +557,9 @@ class DietaFragment : Fragment() {
                                 //Y con esto pasamos a la siguiente pantalla
                                 findNavController().navigate(R.id.nav_detalle_receta, bundle)
                             }
+                        }else {
+                            binding.btmediamananaHoy.visibility = View.GONE
+                            binding.mediamananaHoy.visibility = View.GONE
                         }
                     }
                     val jsonMedio = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("comida"))
@@ -637,6 +639,9 @@ class DietaFragment : Fragment() {
                                     //Y con esto pasamos a la siguiente pantalla
                                     findNavController().navigate(R.id.nav_detalle_receta, bundle)
                                 }
+                            }else {
+                                binding.btmeriendaHoy.visibility = View.GONE
+                                binding.meriendaHoy.visibility = View.GONE
                             }
                         }
                     val jsonCe = cursorReceta.getString(cursorReceta.getColumnIndexOrThrow("cena"))
@@ -862,7 +867,7 @@ class DietaFragment : Fragment() {
             registro.put("preparacion", getString(R.string.receta_descripcion))
             registro.put("ingredientes", jsonIngredientes)
             registro.put("calorias", 0)
-            registro.put("url", "www.youube.com")
+            registro.put("url", "www.youtube.com")
             baseGuardado.insert("recetas", null, registro)
         }
         //Ya que estamos, mostramos el mensaje de bienvenida al usuario

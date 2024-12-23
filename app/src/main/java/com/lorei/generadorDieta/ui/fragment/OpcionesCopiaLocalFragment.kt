@@ -15,7 +15,6 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.lorei.generadorDieta.R
 import com.lorei.generadorDieta.databinding.OpcionesCopiaLocalLayoutBinding
-import com.lorei.generadorDieta.databinding.OpcionesMainLayoutBinding
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
